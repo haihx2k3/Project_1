@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Chat.ChatActivity">
+    <RelativeLayout
+        android:id="@+id/rlChat"
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+
+        <!-- Back Button -->
+        <ImageButton
+            android:id="@+id/imgBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/baseline_chevron_left_24"
+            app:tint="@color/green"
+            android:layout_alignParentLeft="true"
+            android:background="@android:color/transparent"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/cirAvtChat"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            app:civ_border_color="#F1ECEC"
+            app:civ_circle_background_color="@color/gray"
+            app:civ_border_width="2dp"
+            android:layout_toEndOf="@id/imgBack"
+            android:src="@drawable/profile"
+            android:layout_margin="4dp"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/txtUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/cirAvtChat"
+            android:layout_centerVertical="true"
+            android:text="Test user 1"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:paddingStart="8dp"
+            android:paddingLeft="8dp" />
+
+    </RelativeLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcChat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rlChat"
+        android:layout_above="@+id/lnChat"/>
+
+    <LinearLayout
+        android:id="@+id/lnChat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+        <EditText
+            android:id="@+id/message_input"
+            android:layout_width="wrap_content"
+            android:layout_weight="20"
+            android:layout_height="wrap_content"
+            android:hint="Nhập tin nhắn ở đây"
+            android:layout_toStartOf="@id/imgSent"
+            android:padding="12dp"
+            android:background="@android:color/white"
+            android:elevation="2dp" />
+
+        <!-- Send Button -->
+        <ImageButton
+            android:id="@+id/imgSent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/baseline_send_24"
+            android:background="@android:color/transparent"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center"
+            app:tint="@color/blue"/>
+    </LinearLayout>
+</RelativeLayout>

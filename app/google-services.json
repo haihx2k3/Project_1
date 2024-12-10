@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "7779016552",
+    "project_id": "shopt-3fc42",
+    "storage_bucket": "shopt-3fc42.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:7779016552:android:4201e66e72018cddb840dd",
+        "android_client_info": {
+          "package_name": "com.example.project_1_java"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUXMyDKhGW9lZDFDai8BRMLsNSDyFY2lM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

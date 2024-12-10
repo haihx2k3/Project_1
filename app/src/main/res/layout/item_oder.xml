@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:layout_marginBottom="10dp"
+    android:orientation="vertical"
+    app:cardCornerRadius="5dp"
+    android:layout_margin="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <CheckBox
+            android:id="@+id/ckOderFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="40dp" />
+
+        <ImageView
+            android:id="@+id/imgOder"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignTop="@id/ckOderFragment"
+            android:layout_toRightOf="@id/ckOderFragment"
+            android:layout_marginLeft="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/dr1" />
+
+        <TextView
+            android:id="@+id/txtTittleOder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/imgOder"
+            android:layout_alignTop="@id/imgOder"
+            android:layout_marginLeft="20dp"
+            android:text="Tên sản phẩm" />
+
+        <TextView
+            android:id="@+id/txtPriceOder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtTittleOder"
+            android:layout_alignLeft="@id/txtTittleOder"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/green"
+            android:text="Giá" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtPriceOder"
+            android:layout_alignLeft="@id/txtPriceOder"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/imgMinusOder"
+                android:layout_width="19dp"
+                android:layout_height="19dp"
+                android:background="@drawable/buttonoder"
+                android:scaleType="centerInside"
+                android:src="@drawable/baseline_horizontal_rule_24" />
+
+            <TextView
+                android:id="@+id/txtCountOder"
+                android:layout_width="40dp"
+                android:layout_height="19dp"
+                android:background="@drawable/buttonoder"
+                android:gravity="center"
+                android:text="1" />
+
+            <ImageButton
+                android:id="@+id/imgPlusOder"
+                android:layout_width="19dp"
+                android:layout_height="19dp"
+                android:background="@drawable/buttonoder"
+                android:scaleType="centerInside"
+                android:src="@drawable/baseline_add_24" />
+        </LinearLayout>
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/lnOverlayOder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:background="#400000FF"
+        android:visibility="gone">
+        <ImageButton
+            android:id="@+id/imgDeleteOder"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/baseline_restore_from_trash_24"
+            android:background="@android:color/transparent"
+            app:tint="@color/white"
+            android:scaleType="centerCrop"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

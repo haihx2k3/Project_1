@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Footer.EditActivity">
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnLogOut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:drawablePadding="10dp"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp"
+        android:text="Đăng xuất"
+        android:drawableLeft="@drawable/baseline_phone_android_24"
+        android:gravity="start|center"
+        android:drawableRight="@drawable/baseline_chevron_right_24"
+        android:background="@drawable/bk_btnsearch"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#7E8C93"
+        android:layout_marginLeft="10dp"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnFinish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:drawablePadding="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:text="Thoát"
+        android:drawableLeft="@drawable/baseline_history_24"
+        android:gravity="start|center_vertical"
+        android:drawableRight="@drawable/baseline_chevron_right_24"
+        android:background="@drawable/bk_btnsearch"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#7E8C93"
+        android:layout_marginLeft="10dp"
+        />
+</LinearLayout>

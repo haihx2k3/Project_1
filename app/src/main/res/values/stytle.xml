@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="sizeTxt" parent="TextAppearance.Design.CollapsingToolbar.Expanded">
+        <item name="android:textSize">10dp</item>
+    </style>
+</resources>

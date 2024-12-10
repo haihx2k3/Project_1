@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+    <LinearLayout
+        android:id="@+id/lnChatLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bk_btnlogin"
+        android:backgroundTint="@color/gray"
+        android:padding="8dp">
+        <TextView
+            android:id="@+id/txtChatLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="Chat Left"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lnChatRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bk_btnlogin"
+        android:backgroundTint="@color/blue"
+        android:layout_alignParentRight="true"
+        android:padding="8dp">
+        <TextView
+            android:id="@+id/txtChatRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="Chat Right"/>
+    </LinearLayout>
+</RelativeLayout>

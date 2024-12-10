@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Card.DeliveryFragment">
+
+    <LinearLayout
+        android:id="@+id/ln"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal">
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/imgBack"
+            android:scaleType="centerCrop"
+            android:src="@drawable/baseline_chevron_left_24"
+            android:background="@android:color/transparent"
+            app:tint="@color/green"
+            android:layout_marginLeft="5dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Phương thức vận chuyển (Nhấn để chọn)"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center"
+            android:textSize="18dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/shippingMethodsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@id/ln"
+        android:padding="8dp"
+        android:background="#f2f2f2">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Các phương thức vận chuyển của Projec1"
+            android:background="#f0f0f0"
+            android:padding="8dp"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:id="@+id/shippingMethod1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="#ffffff"
+            android:layout_marginBottom="8dp">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingStart="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nhanh đ18.300"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtDeliveryFast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Đảm bảo nhận hàng từ 14 Tháng 7 - 15 Tháng 7" />
+
+                <TextView
+                    android:id="@+id/txtVoucherFast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nhận Voucher trị giá đ15.000 nếu đơn hàng được giao đến bạn sau ngày 15 Tháng 7 2024." />
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/imgCheck"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/baseline_check_24"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/shippingMethod2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="#ffffff"
+            android:layout_marginBottom="8dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingStart="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tiết kiệm đ14.850"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtDeliveryLow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Đảm bảo nhận hàng từ 15 Tháng 7 - 17 Tháng 7" />
+
+                <TextView
+                    android:id="@+id/txtVoucherLow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nhận Voucher trị giá đ15.000 nếu đơn hàng được giao đến bạn sau ngày 17 Tháng 7 2024." />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imgCheck2"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/baseline_check_24"
+                android:layout_gravity="center_vertical"
+                android:visibility="gone"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Xác nhận"
+        android:background="@color/green"
+        android:textColor="@android:color/white"
+        android:layout_alignParentBottom="true"
+        android:padding="16dp" />
+
+</RelativeLayout>
