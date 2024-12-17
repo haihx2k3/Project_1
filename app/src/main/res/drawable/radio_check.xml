@@ -3,7 +3,7 @@
    <item>
        <shape android:shape="oval"
            android:useLevel="false">
-            <stroke android:color="@color/orange"
+            <stroke android:color="@color/green"
                 android:width="2dp"/>
            <size android:width="18dp"
                android:height="18dp"/>
@@ -17,7 +17,7 @@
         <shape android:shape="oval"
             android:useLevel="false">
             <corners android:radius="3dp"/>
-            <solid android:color="@color/orange"/>
+            <solid android:color="@color/green"/>
         </shape>
     </item>
 </layer-list>

@@ -1,8 +1,8 @@
 package com.example.project_1_java.Utils;
 
 import android.annotation.SuppressLint;
-import android.net.Uri;
 
+import com.example.project_1_java.Model.BoothModel;
 import com.example.project_1_java.Model.ClassifyModel;
 import com.example.project_1_java.Model.ImageModel;
 import com.example.project_1_java.Model.ModelProduct;
@@ -16,6 +16,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.Source;
 import com.google.gson.Gson;
 
@@ -26,8 +27,9 @@ import java.util.List;
 import java.util.Map;
 
 public class FirebaseUtil {
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    private final FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private DocumentSnapshot lastData;
+    private boolean isLoading = false;
     public static String currentUserId() {
        return FirebaseAuth.getInstance().getUid();
     }
@@ -39,6 +41,7 @@ public class FirebaseUtil {
         return FirebaseFirestore.getInstance().collection("chatRooms");
     }
 
+    @SuppressLint("SimpleDateFormat")
     public static String timeStampToString(Timestamp timestamp){
         return new SimpleDateFormat("HH:mm").format(timestamp.toDate());
     }
@@ -118,12 +121,12 @@ public class FirebaseUtil {
                 ? userId1 + "_" + userId2
                 : userId2 + "_" + userId1;
     }
-
+    @SuppressWarnings("unchecked")
     public void addProduct(String id,String branch, ModelProduct item, Runnable onSuccess, FailureCallback onFailure) {
         List<Task<Void>> tasks = new ArrayList<>();
-        tasks.add(db.collection("Product").document(id).set(item));
-        tasks.add(db.collection("Booth").document(currentUserId()).collection("Available").document(id).set(item));
-        tasks.add(db.collection(branch).document(id).set(item));
+        tasks.add(firestore.collection("Product").document(id).set(item));
+        tasks.add(firestore.collection("Booth").document(currentUserId()).collection("Available").document(id).set(item));
+        tasks.add(firestore.collection(branch).document(id).set(item));
 
         Tasks.whenAll(tasks)
                 .addOnSuccessListener(aVoid->onSuccess.run())
@@ -132,28 +135,33 @@ public class FirebaseUtil {
     }
 
     public void addItemToCard( String id, OrderModel item, Runnable onSuccess, FailureCallback onFailure) {
-        db.collection("Card").document(currentUserId()).collection("card").document(id).set(item)
+        firestore.collection("Card").document(currentUserId()).collection("card").document(id).set(item)
                 .addOnSuccessListener(aVoid -> onSuccess.run())
                 .addOnFailureListener(e -> onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error occurred"));
     }
 
     public void addItemOder(String sellerId, String idStatus, String idOder, OrderClassifyModel item, Runnable onSuccess, FailureCallback onFailure) {
-        db.collection("StatusOrder").document(sellerId).collection("status").document(idStatus).set(item)
+        firestore.collection("StatusOrder").document(sellerId).collection("status").document(idStatus).set(item)
                 .addOnSuccessListener(aVoid -> {
-                    db.collection("Card").document(currentUserId()).collection("card").document(idOder).delete();
+                    firestore.collection("Card").document(currentUserId()).collection("card").document(idOder).delete();
                     onSuccess.run();
                 })
                 .addOnFailureListener(e -> onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error occurred"));
     }
     public void addAds(String id, ImageModel image, Runnable onSuccess, FailureCallback onFailure) {
-        db.collection("Ads").document(id).set(image)
+        firestore.collection("Ads").document(id).set(image)
                 .addOnSuccessListener(aVoid -> onSuccess.run())
                 .addOnFailureListener(e -> onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error occurred"));
     }
     public void getItemProduct(ItemCallback<List<ModelProduct>> onSuccess, FailureCallback onFailure) {
-        db.collection("Product").get()
-                .addOnSuccessListener(result -> {
-                    List<ModelProduct> itemList = new ArrayList<>();
+        if (isLoading) return;
+        isLoading = true;
+        Query query = firestore.collection("Product").limit(5);
+        if (lastData!=null){
+            query = query.startAfter(lastData);
+        }
+        query.get().addOnSuccessListener(result->{
+            List<ModelProduct> itemList = new ArrayList<>();
                     if (result != null && !result.getDocuments().isEmpty()) {
                         for (DocumentSnapshot document : result.getDocuments()) {
                             ModelProduct item = document.toObject(ModelProduct.class);
@@ -161,13 +169,18 @@ public class FirebaseUtil {
                                 itemList.add(item);
                             }
                         }
+                        lastData = result.getDocuments().get(result.size() - 1);
                     }
+                    isLoading = false;
                     onSuccess.onResult(itemList);
                 })
-                .addOnFailureListener(e -> onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error occurred"));
+                .addOnFailureListener(e -> {
+                    isLoading = false;
+                    onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error getItemProduct");
+                });
     }
     public void getAds(ItemCallback<List<String>> onSuccess, FailureCallback onFailure) {
-        db.collection("Ads").get()
+        firestore.collection("Ads").get()
                 .addOnSuccessListener(result -> {
                     List<String> itemList = new ArrayList<>();
                     if (result != null && !result.getDocuments().isEmpty()) {
@@ -184,7 +197,7 @@ public class FirebaseUtil {
     }
 
     public void getItemProductId(String id, ItemCallback<List<String>> onSuccess, FailureCallback onFailure) {
-        db.collection("Product").document(id).get()
+        firestore.collection("Product").document(id).get()
                 .addOnSuccessListener(result -> {
                     if (result.exists()) {
                         List<String> uriList = (List<String>) result.get("uriList");
@@ -195,7 +208,7 @@ public class FirebaseUtil {
     }
 
     public void getSubProduct(String id, ItemCallback<List<ClassifyModel>> onSuccess, FailureCallback onFailure) {
-        db.collection("Product").document(id).get()
+        firestore.collection("Product").document(id).get()
                 .addOnSuccessListener(result -> {
                     if (result.exists()) {
                         List<HashMap<String, Object>> subList = (List<HashMap<String, Object>>) result.get("classify");
@@ -216,7 +229,7 @@ public class FirebaseUtil {
 
 
     public void getItemToCard( ItemCallback<List<OrderModel>> onSuccess, FailureCallback onFailure) {
-        db.collection("Card").document(currentUserId()).collection("card").get()
+        firestore.collection("Card").document(currentUserId()).collection("card").get()
                 .addOnSuccessListener(result -> {
                     List<OrderModel> itemList = new ArrayList<>();
                     for (DocumentSnapshot document : result.getDocuments()) {
@@ -225,25 +238,25 @@ public class FirebaseUtil {
                     }
                     onSuccess.onResult(itemList);
                 })
-                .addOnFailureListener(e -> onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error occurred"));
+                .addOnFailureListener(e -> onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error occurred get Card"));
     }
 
-    public void getItemToBooth(String user, ItemCallback<List<ModelProduct>> onSuccess, FailureCallback onFailure) {
-        db.collection("Booth").document(user).collection("booth").get()
+    public void getItemToBooth(ItemCallback<List<BoothModel>> onSuccess, FailureCallback onFailure) {
+        firestore.collection("Booth").document(currentUserId()).collection("Available").get()
                 .addOnSuccessListener(result -> {
-                    List<ModelProduct> itemList = new ArrayList<>();
+                    List<BoothModel> itemList = new ArrayList<>();
                     for (DocumentSnapshot document : result.getDocuments()) {
-                        ModelProduct item = document.toObject(ModelProduct.class);
+                        BoothModel item = document.toObject(BoothModel.class);
                         itemList.add(item);
                     }
                     onSuccess.onResult(itemList);
                 })
-                .addOnFailureListener(e -> onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error occurred"));
+                .addOnFailureListener(e -> onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error occurred get Booth"));
     }
 
     public void updateOder(String id, int count, Float total) {
         Map<String, Object> updates = Map.of("count" , count, "total", total);
-        db.collection("Card").document(currentUserId()).collection("card").document(id).update(updates);
+        firestore.collection("Card").document(currentUserId()).collection("card").document(id).update(updates);
     }
 
     public void updateProfile(String user, String name, String birthday, String gender, String images, Runnable onSuccess) {
@@ -253,12 +266,12 @@ public class FirebaseUtil {
         if (gender != null) updates.put("gender", gender);
         if (images != null) updates.put("imgProfile", images);
         if (!updates.isEmpty()) {
-            db.collection("Users").document(user).update(updates).addOnSuccessListener(aVoid -> onSuccess.run());
+            firestore.collection("Users").document(user).update(updates).addOnSuccessListener(aVoid -> onSuccess.run());
         }
     }
 
     public void deleteOder (String id) {
-        db.collection("Card").document(currentUserId()).collection("card").document(id).delete();
+        firestore.collection("Card").document(currentUserId()).collection("card").document(id).delete();
     }
 
     // Callback interfaces for handling results

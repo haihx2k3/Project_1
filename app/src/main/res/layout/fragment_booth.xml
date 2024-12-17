@@ -51,31 +51,23 @@
         android:layout_below="@+id/RlHeader"
         android:background="@color/white"
         app:tabRippleColor="@android:color/transparent">
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Còn hàng"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chờ duyệt"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vi phạm"/>
     </com.google.android.material.tabs.TabLayout>
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vpSellMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/tabName"
-        android:layout_above="@+id/botAdd"
         android:background="@color/gray"/>
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/botAdd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:layout_alignParentBottom="true">
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/buttonoder"
-            android:textAllCaps="false"
-            android:text="Thêm sản phẩm mới"
-            android:textColor="@color/green"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:textSize="15dp"
-            android:id="@+id/btnAddNewProduct"/>
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
-
 </RelativeLayout>

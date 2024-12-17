@@ -1,34 +1,28 @@
 package com.example.project_1_java.Header;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.project_1_java.Card.CardActivity;
 import com.example.project_1_java.Chat.ResentChatActivity;
 import com.example.project_1_java.Header.Adapter.BranchHeaderAdapter;
-import com.example.project_1_java.Header.Adapter.ViewpagerAdapter;
-import com.example.project_1_java.Card.CardActivity;
 import com.example.project_1_java.Header.Adapter.ProductAdapter;
+import com.example.project_1_java.Header.Adapter.ViewpagerAdapter;
 import com.example.project_1_java.InterFace.OnClick;
 import com.example.project_1_java.Login.LoginActivity;
 import com.example.project_1_java.Model.BranchModel;
-import com.example.project_1_java.Model.ImageModel;
 import com.example.project_1_java.Model.ModelProduct;
 import com.example.project_1_java.Product.ProductInforActivity;
 import com.example.project_1_java.Search.SearchActivity;
@@ -59,15 +53,14 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        HomeViewModel viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        presenter = new HomePresenter(this, getContext(), viewModel);
+        presenter = new HomePresenter(this, getContext());
         viewPager = binding.viewPager2;
         presenter.onDataBranch();
         setupListener();
     }
 
     private void setupListener() {
-        binding.imgSearch.setOnClickListener(v->presenter.onSearchButtonClicked());
+        binding.imgSearch.setOnClickListener(v->presenter.onDataLoad());
         binding.btnCard.setOnClickListener(v->presenter.onCardClicked());
         binding.btnChat.setOnClickListener(v->presenter.onChatClicked());
 
@@ -103,6 +96,24 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                 }
             }));
         }
+        binding.rvPropose.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
+                    if (layoutManager != null) {
+                        int visibleItemCount = layoutManager.getChildCount();
+                        int totalItemCount = layoutManager.getItemCount();
+                        int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                        if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
+                            Log.d("RecyclerView", "Đã cuộn đến cuối danh sách");
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -164,5 +175,10 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         intent.putExtra("title", title);
         intent.putExtra("price", price);
         startActivity(intent);
+    }
+
+    @Override
+    public void showMoreProduct(List<ModelProduct> moreProduct) {
+
     }
 }

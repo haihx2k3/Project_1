@@ -18,6 +18,7 @@ public interface HomeContract {
         void showCardActivity(boolean checkLogin);
         void showProductActivity(String sellerId, String id, String title, String price);
         LifecycleOwner getViewLifecycleOwner();
+        void showMoreProduct(List<ModelProduct> moreProduct);
     }
 
     interface Presenter {
@@ -26,5 +27,6 @@ public interface HomeContract {
         void onCardClicked();
         void onProductClicked(int pos, ModelProduct product);
         void onDataBranch();
+        void onDataLoad();
     }
 }

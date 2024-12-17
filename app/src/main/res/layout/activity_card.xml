@@ -47,11 +47,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:orientation="horizontal">
                 <CheckBox
                     android:id="@+id/ckOder"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -87,8 +88,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/baseline_shopping_cart_24"
-                app:tint="#A1A1A1"/>
+                android:src="@drawable/emty_card" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

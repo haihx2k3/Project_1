@@ -1,19 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:layout_margin="10dp"
     tools:context=".Store.BoothClassify.AvailableFragment">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Available" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcAvailable"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray"/>
-
-</LinearLayout>
+        android:background="@color/white"/>
+    <LinearLayout
+        android:id="@+id/lnWaitOder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:background="@color/gray">
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/emty_card"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Giỏ hàng trống"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/frAvailable"/>
+</RelativeLayout>

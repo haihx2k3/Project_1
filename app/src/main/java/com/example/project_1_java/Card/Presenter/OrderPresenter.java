@@ -40,10 +40,9 @@ public class OrderPresenter implements OrderContract.Presenter {
     }
 
     private void showTotal() {
-       Float total = 0F;
+       float total = 0F;
         for (OrderClassifyModel order : orderList) {
             total += FormatVND.convertStringToFloat(order.getTotal());
-            Log.d("tt",order.getTotal());
         }
         String formattedTotal = FormatVND.formatCurrency(String.format("%.3f", total));
         view.showTotal(formattedTotal);
@@ -55,12 +54,10 @@ public class OrderPresenter implements OrderContract.Presenter {
             view.showToast("Địa chỉ nhận hàng không được để trống");
             return;
         }
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
         for (int i = 0; i < orderList.size(); i++) {
-            String idStatus = dbRef.push().getKey();
             FirebaseUtil util = new FirebaseUtil();
             util.addItemOder(
-                    orderList.get(i).getSellerId(), idStatus,
+                    orderList.get(i).getSellerId(),  orderList.get(i).getIdOrder(),
                     orderList.get(i).getIdOrder(), orderList.get(i), new Runnable() {
                         @Override
                         public void run() {

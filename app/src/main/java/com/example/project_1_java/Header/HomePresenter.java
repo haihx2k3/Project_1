@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.TypedArray;
 
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.project_1_java.Model.BranchModel;
 import com.example.project_1_java.Model.ImageModel;
@@ -17,10 +19,11 @@ public class HomePresenter implements HomeContract.Presenter{
     private final HomeContract.View view;
     private final Context context;
     private List<BranchModel> branchModels;
-
-    public HomePresenter(HomeContract.View view,Context context, HomeViewModel viewModel) {
+    private HomeViewModel viewModel;
+    public HomePresenter(HomeContract.View view,Context context) {
         this.view = view;
         this.context = context;
+        this.viewModel = new ViewModelProvider((ViewModelStoreOwner) context).get(HomeViewModel.class);
         this.branchModels = new ArrayList<>();
         viewModel.mListImgVp2.observe(this.view.getViewLifecycleOwner(), new Observer<List<String>>() {
             @Override
@@ -75,5 +78,10 @@ public class HomePresenter implements HomeContract.Presenter{
         }
         branchImages.recycle();
         view.displayBranch(branchModels);
+    }
+
+    @Override
+    public void onDataLoad() {
+        viewModel.loadMoreProducts();
     }
 }

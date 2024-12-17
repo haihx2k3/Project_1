@@ -16,16 +16,17 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/imgItem"
         android:layout_marginStart="20dp"
-        android:text="Nhap"
-        android:layout_centerVertical="true"/>
+        android:text="Ten san pham"/>
     <TextView
         android:id="@+id/txtPriceClassify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Gia"
-        android:layout_toLeftOf="@id/imgEdit"
-        android:layout_marginRight="50dp"
-        android:layout_centerVertical="true"/>
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/txtNameClassify"
+        android:layout_toRightOf="@id/imgItem"
+        />
 
     <ImageButton
         android:id="@+id/imgEdit"

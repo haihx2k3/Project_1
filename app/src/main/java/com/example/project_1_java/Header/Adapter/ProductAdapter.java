@@ -88,5 +88,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             price = itemView.findViewById(R.id.txtPriceProduct);
         }
     }
+    public void addItems(List<ModelProduct> newItems) {
+        int previousSize = product.size();
+        product.addAll(newItems);
+        notifyItemRangeInserted(previousSize, newItems.size());
+    }
 
 }
