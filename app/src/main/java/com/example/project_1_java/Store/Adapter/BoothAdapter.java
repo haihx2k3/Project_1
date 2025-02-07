@@ -7,7 +7,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.project_1_java.Store.BoothClassify.AvailableFragment;
-import com.example.project_1_java.Store.BoothClassify.BreachFragment;
+import com.example.project_1_java.Store.BoothClassify.SendingFragment;
 import com.example.project_1_java.Store.BoothClassify.PendingFragment;
 
 public class BoothAdapter extends FragmentStateAdapter {
@@ -24,7 +24,7 @@ public class BoothAdapter extends FragmentStateAdapter {
             case 1:
                 return new PendingFragment();
             default:
-                return new BreachFragment();
+                return new SendingFragment();
         }
     }
 

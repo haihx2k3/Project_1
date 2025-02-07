@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@color/gray"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/imgSending"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/baseline_image_search_24" />
+
+    <TextView
+        android:id="@+id/txtIdSending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/imgSending"
+        android:text="id" />
+    <TextView
+        android:id="@+id/txtDeliverySending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_toRightOf="@id/imgSending"
+        android:layout_below="@id/txtIdSending"
+        android:text="Delivery" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnPrintfSending"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:background="@drawable/bk_btnlogin"
+        android:layout_centerVertical="true"
+        android:text="In phiếu"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>

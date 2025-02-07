@@ -20,16 +20,17 @@ public interface ClassifyContract {
     }
 
     interface Presenter {
-        void onAddClassifyClicked();
         void onAddRcClassifyClicked();
         void onBackClicked();
         void onSaveClicked();
         void onImageClicked(int position);
         void onEditClicked(int position);
+        void onDeleteClicked(int position);
         void onPermissionGranted();
         void onPermissionDenied();
         void handleImagePicked(String imageUri);
         void handleDataReceived(String title, String price);
         void handleDataUpdated(String title, String price);
+        void handleDataTemporary(ArrayList<ClassifyModel> temporary);
     }
 }

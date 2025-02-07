@@ -15,8 +15,6 @@ import com.bumptech.glide.Glide;
 import com.example.project_1_java.Card.CardActivity;
 import com.example.project_1_java.Model.ClassifyModel;
 import com.example.project_1_java.Product.ProductClassifyAdapter;
-import com.example.project_1_java.Product.Sub.ProductClassifyConTract;
-import com.example.project_1_java.Product.Sub.ProductClassifyPresenter;
 import com.example.project_1_java.R;
 import com.example.project_1_java.databinding.FragmentProductClassifyBinding;
 import com.google.android.flexbox.FlexDirection;
@@ -28,7 +26,7 @@ import java.util.List;
 
 public class ProductClassifyFragment extends Fragment implements ProductClassifyConTract.View {
     private FragmentProductClassifyBinding binding;
-    private String id, img, title, price, seller;
+    private String id, img, title, price, sellerId,sellerName,avt;
     private ProductClassifyPresenter presenter;
 
     @Nullable
@@ -47,7 +45,9 @@ public class ProductClassifyFragment extends Fragment implements ProductClassify
             id = bundle.getString("id");
             title = bundle.getString("title");
             price = bundle.getString("price");
-            seller = bundle.getString("sellerId");
+            sellerId = bundle.getString("sellerId");
+            sellerName = bundle.getString("sellerName");
+            avt = bundle.getString("avt");
             img = bundle.getString("img");
             presenter.loadProductDetails(id);
         }
@@ -84,7 +84,7 @@ public class ProductClassifyFragment extends Fragment implements ProductClassify
         binding.txtPriceShow.setText(price);
         Glide.with(requireContext()).load(img).into(binding.imageView2);
         binding.btnAdd.setOnClickListener(v -> {
-            presenter.onAddToCartClicked(title,type, price,img, Integer.parseInt(binding.txtCount.getText().toString()),seller);
+            presenter.onAddToCartClicked(title,type, price,img, Integer.parseInt(binding.txtCount.getText().toString()),sellerId,sellerName,avt);
         });
     }
 
@@ -99,7 +99,7 @@ public class ProductClassifyFragment extends Fragment implements ProductClassify
     public void enableAddButton() {
         binding.btnAdd.setEnabled(true);
         binding.btnAdd.setBackgroundResource(R.drawable.bk_btnlogin);
-        binding.btnAdd.setTextColor(Color.parseColor("#F16337"));
+        binding.btnAdd.setTextColor(Color.parseColor("#00CC00"));
 
     }
 

@@ -15,18 +15,13 @@ import android.provider.Settings;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.project_1_java.ApiLocation.AddressService;
 import com.example.project_1_java.R;
 import com.example.project_1_java.Utils.copyDbHelper;
 
-import org.json.JSONObject;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.Executors;
 
 public class LocationPresenter implements LocationContract.Presenter{
@@ -35,10 +30,12 @@ public class LocationPresenter implements LocationContract.Presenter{
     private final copyDbHelper db;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private MyLocationNewOverlay locationOverlay;
+    private AddressService service;
     public LocationPresenter(LocationContract.View view,Context context) {
         this.view = view;
         this.context = context;
         this.db = new copyDbHelper(context);
+        this.service = new AddressService();
     }
 
     @Override
@@ -87,7 +84,7 @@ public class LocationPresenter implements LocationContract.Presenter{
     public void fetchAddress(double latitude, double longitude) {
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
-                String address = getAddressFromCoordinates(latitude, longitude);
+                String address = service.getAddressFromCoordinates(latitude, longitude);
                 mainHandler.post(()->{
                     view.displayLocation(address);
                     view.hideLoading();
@@ -145,34 +142,6 @@ public class LocationPresenter implements LocationContract.Presenter{
                 .setPositiveButton("Có", (dialog, which) -> context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
                 .setNegativeButton("Không", null)
                 .show();
-    }
-    private String getAddressFromCoordinates(double latitude, double longitude) throws Exception {
-        URL url = new URL("https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" + latitude + "&lon=" + longitude);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-
-        try (Scanner scanner = new Scanner(connection.getInputStream())) {
-            StringBuilder response = new StringBuilder();
-            while (scanner.hasNext()) {
-                response.append(scanner.nextLine());
-            }
-            JSONObject jsonObject = new JSONObject(response.toString());
-            JSONObject address = jsonObject.getJSONObject("address");
-
-            List<String> addressParts = new ArrayList<>();
-            addIfNotEmpty(addressParts, address.optString("road"));
-            addIfNotEmpty(addressParts, address.optString("city_district"));
-            addIfNotEmpty(addressParts, address.optString("quarter"));
-            addIfNotEmpty(addressParts, address.optString("city"));
-
-
-            return String.join(", ", addressParts);
-        }
-    }
-    private void addIfNotEmpty(List<String> list, String value) {
-        if (!value.isEmpty()) {
-            list.add(value);
-        }
     }
     public void stopLocationUpdates() {
         if (locationOverlay != null) {

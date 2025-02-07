@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.example.project_1_java.Funcion.LoadFragment;
 import com.example.project_1_java.InterFace.OnClickClassify;
 import com.example.project_1_java.Model.ClassifyModel;
+import com.example.project_1_java.Model.OrderModel;
 import com.example.project_1_java.R;
 import com.example.project_1_java.Store.Adapter.ClassifyAdapter;
 import com.example.project_1_java.Store.InterFace.ClassifyContract;
@@ -61,19 +63,18 @@ public class ClassifyFragment extends Fragment implements ClassifyData, Classify
         setupListener();
         setupRecycleView();
         setupRsLauncher();
-        permissionManager = new PermissionManager(this,permissionLauncher,pickImageLauncher);
+        permissionManager = new PermissionManager(this, permissionLauncher, pickImageLauncher);
+        getReceive();
     }
 
     private void setupListener() {
-        binding.btnAddClassify.setOnClickListener(view -> {
-            binding.lnClassify.setVisibility(View.VISIBLE);
-            presenter.onAddClassifyClicked();
+        binding.btnAddRcClassify.setOnClickListener(view -> {
+            binding.scClassify.setVisibility(View.VISIBLE);
+            presenter.onAddRcClassifyClicked();
         });
-        binding.btnAddRcClassify.setOnClickListener(view -> presenter.onAddRcClassifyClicked());
-        binding.imgBack.setOnClickListener(view ->getParentFragmentManager().popBackStack());
+        binding.imgBack.setOnClickListener(view -> getParentFragmentManager().popBackStack());
         binding.btnSave.setOnClickListener(view -> presenter.onSaveClicked());
     }
-
     private void setupRecycleView() {
         adapter = new ClassifyAdapter(new ArrayList<>(), new OnClickClassify() {
             @Override
@@ -89,12 +90,24 @@ public class ClassifyFragment extends Fragment implements ClassifyData, Classify
             public void onUpdate(int pos) {
                 presenter.onEditClicked(pos);
             }
+
+            @Override
+            public void onDelete(int pos) {
+                presenter.onDeleteClicked(pos);
+            }
         });
         binding.rcClassify.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false));
         binding.rcClassify.setAdapter(adapter);
 
     }
-
+    private void getReceive() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            binding.scClassify.setVisibility(View.VISIBLE);
+            ArrayList<ClassifyModel> result = getArguments().getParcelableArrayList("Category");
+            presenter.handleDataTemporary(result);
+        }
+    }
     private void setupRsLauncher() {
         pickImageLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -115,21 +128,24 @@ public class ClassifyFragment extends Fragment implements ClassifyData, Classify
             }
         });
     }
+
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (getParentFragment() instanceof ClassifyReceived){
+        if (getParentFragment() instanceof ClassifyReceived) {
             dataSending = (ClassifyReceived) getParentFragment();
         }
     }
 
     @Override
     public void showVariants(List<ClassifyModel> variants) {
-        adapter.updateData(variants);
+        if (variants != null && !variants.isEmpty()) {
+            adapter.updateData(variants);
+        }
     }
 
     @Override
     public void onSetting() {
-       permissionManager.showPermissionRationaleDialog();
+        permissionManager.showPermissionRationaleDialog();
     }
 
 
@@ -140,7 +156,7 @@ public class ClassifyFragment extends Fragment implements ClassifyData, Classify
 
     @Override
     public void closeActivityWithResult(ArrayList<ClassifyModel> data) {
-        if (dataSending!=null){
+        if (dataSending != null) {
             dataSending.onDataSent(data);
             getParentFragmentManager().popBackStack();
         }
@@ -153,7 +169,7 @@ public class ClassifyFragment extends Fragment implements ClassifyData, Classify
 
     @Override
     public void showError(String message) {
-        Toast.makeText(getContext(),message,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -177,6 +193,5 @@ public class ClassifyFragment extends Fragment implements ClassifyData, Classify
     public void onDataUpdated(String title, String price) {
         binding.frClassify.setVisibility(View.GONE);
         presenter.handleDataUpdated(title, price);
-
     }
 }

@@ -2,14 +2,7 @@
     <string name="app_name">Shoptree</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="dummy_text">Quý nhi bất kiêu, thắng nghi bất bội, hiền nhi năng hạ, cương nhi năng nhẫn \
-        Dịch nghĩa: Cao quý mà không kiêu ngạo, chiến thắng, lập công mà không tự mãn, hiền tài mà khiêm hạ giữ lễ với người dưới,
-        cương trực mà bao dung nhẫn nại.2. Thiếu tráng bất nỗ lực, lão đại đồ thương biDịch nghĩa: Lúc còn trẻ đầy sinh lực nếu như
-        không cố gắng thì khi về già sẽ hối tiếc những tháng ngày đã qua.3. Phi đạm bạc vô dĩ minh chí, phi ninh tĩnh vô dĩ chí viễn
-         Dịch nghĩa: Không đạm bạc thì không tỏ rõ được chí hướng, không yên tĩnh thì không thể xây dựng được chí hướng cao xa.
-        Thế lợi chi giao, nan dĩ kinh viễnDịch nghĩa: Kết giao quyền thế, lợi ích khó mà lâu bền.5. Chí đương tồn cao viễnDịch nghĩa:
-        Chí hướng nên cao xa
-    Phi học vô dĩ quảng tài, phi chí vô dĩ thành họcDịch nghĩa: Không học thì sẽ không mở rộng được cái tài, học mà không có ý chí sẽ không có thành quả.7. Cúc cung tẫn tụy tử nhi hậu dĩDịch nghĩa: Hết lòng tận tụy đến chết mới dừng.8. Viễn lự giả an, vô lự giả nguyDịch nghĩa: Người nhìn xa trông rộng sẽ được bình an, người không biết lo nghĩ gì sẽ gặp nguy hiểm.9. Vấn chi dĩ thị phi nhi quan kỳ chíDịch nghĩa: Muốn xem xét chí hướng của một người cần phải hỏi người đó về phải trái, đúng sai.10. Đãi mạn tắc bất năng khai tinh, hiểm táo tắc bất năng lý tínhDịch nghĩa: Lười nhác thì không thể tinh thông, nóng nảy mạo hiểm thì không thể có lý tính.</string>
+    <string name="dummy_text">Thông tin sản phẩm</string>
     <string name="title_activity_base">BaseActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

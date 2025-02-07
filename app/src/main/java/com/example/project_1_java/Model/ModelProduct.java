@@ -76,4 +76,5 @@ public class ModelProduct {
     public void setClassify(List<ClassifyModel> classify) {
         this.classify = classify;
     }
+
 }

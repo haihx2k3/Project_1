@@ -34,7 +34,7 @@
                         android:layout_height="60dp"
                         android:layout_marginStart="28dp"
                         android:layout_marginTop="60dp"
-                        android:src="@drawable/baseline_account_circle_24"
+                        android:src="@drawable/profile"
                         app:civ_border_color="#F1ECEC"
                         app:civ_border_width="2dp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +44,7 @@
                         android:id="@+id/txtCount"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:background="@drawable/bg_count"
+                        android:background="@drawable/bg_footer_avt"
                         android:src="@drawable/baseline_create_24"
                         android:scaleType="centerCrop"
                         app:layout_constraintBottom_toBottomOf="@+id/profile_image"
@@ -84,9 +84,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:layout_marginBottom="44dp"
-                        android:background="@drawable/buttonoder"
+                        android:background="@drawable/bk_btnlogin"
+                        android:textColor="@color/black"
                         android:text="Đăng Kí"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.66"
@@ -119,7 +120,7 @@
                         />
 
                     <ImageButton
-                        android:id="@+id/ibtnSetiing"
+                        android:id="@+id/btnSetting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
@@ -168,7 +169,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="#7E8C93"
-                        android:layout_marginLeft="10dp"/>
+                        android:layout_marginStart="10dp"/>
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btnHistory"
                         android:layout_width="match_parent"
@@ -219,12 +220,13 @@
                             android:layout_height="30dp"
                             android:background="@android:color/transparent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/baseline_email_24"
+                            android:src="@drawable/sellerconfirm"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.173"
+                            app:layout_constraintHorizontal_bias="0.183"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="1.0"
                             app:tint="@color/blue" />
 
                         <ImageButton
@@ -233,13 +235,13 @@
                             android:layout_height="30dp"
                             android:background="@android:color/transparent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/baseline_account_balance_wallet_24"
+                            android:src="@drawable/orderconfirm"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.406"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintHorizontal_bias="0.32"
+                            app:layout_constraintStart_toEndOf="@+id/imbtnWaitConfirm"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.4"
+                            app:layout_constraintVertical_bias="1.0"
                             app:tint="@color/blue" />
 
                         <ImageButton
@@ -248,28 +250,13 @@
                             android:layout_height="30dp"
                             android:background="@android:color/transparent"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/baseline_directions_car_24"
+                            android:src="@drawable/sending"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.637"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintHorizontal_bias="0.614"
+                            app:layout_constraintStart_toEndOf="@+id/imbtnWaitPickup"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.4"
-                            app:tint="@color/blue" />
-
-                        <ImageButton
-                            android:id="@+id/imbtnWaitEvaluate"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="@android:color/transparent"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/baseline_stars_24"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.871"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.4"
+                            app:layout_constraintVertical_bias="1.0"
                             app:tint="@color/blue" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

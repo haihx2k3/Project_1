@@ -3,15 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_margin="10dp"
     tools:context=".Store.BoothClassify.AvailableFragment">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcAvailable"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"/>
     <LinearLayout
         android:id="@+id/lnWaitOder"
         android:layout_width="match_parent"
@@ -32,8 +25,33 @@
             android:textSize="20dp"
             android:textStyle="bold"/>
     </LinearLayout>
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerAvai"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <include layout="@layout/shimmer_booth"/>
+            <include layout="@layout/shimmer_booth"/>
+            <include layout="@layout/shimmer_booth"/>
+            <include layout="@layout/shimmer_booth"/>
+            <include layout="@layout/shimmer_booth"/>
+            <include layout="@layout/shimmer_booth"/>
+            <include layout="@layout/shimmer_booth"/>
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcAvailable"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:visibility="gone"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/frAvailable"/>
+        android:id="@+id/frAvailable"
+        android:visibility="gone"/>
 </RelativeLayout>

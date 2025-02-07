@@ -102,7 +102,7 @@ public class ProfileActivity extends LoadingEffectActivity implements ProfileCon
 
     @Override
     public void showLoading() {
-        showLoading(1000,()->{});
+        showLoading(10000,()->{});
     }
 
     @Override
@@ -133,11 +133,6 @@ public class ProfileActivity extends LoadingEffectActivity implements ProfileCon
     @Override
     public void finishActivity() {
         finish();
-    }
-
-    @Override
-    public void showGenderDialog() {
-
     }
 
     @Override

@@ -30,7 +30,7 @@ public class LoadingEffectActivity extends AppCompatActivity {
             if (dialog != null && dialog.isShowing()) {
                 dialog.dismiss();
                 onTimeout.run();
-                Log.d("Loading Efect","tiem out");
+                Log.d("Loading Effect","time out");
             }
         }, timeoutMillis);
     }

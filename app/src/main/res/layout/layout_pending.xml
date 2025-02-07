@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@color/gray"
+    android:padding="10dp">
+    <ImageView
+        android:id="@+id/imgPending"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/baseline_image_search_24"/>
+
+    <TextView
+        android:id="@+id/txtTitlePending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/imgPending"
+        android:layout_marginStart="20dp"
+        android:text="Ten san pham"/>
+    <TextView
+        android:id="@+id/txtTypePending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/imgPending"
+        android:layout_marginStart="20dp"
+        android:text="Kiểu"
+        android:layout_below="@+id/txtTitlePending"
+        />
+    <TextView
+        android:id="@+id/txtPricePending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gia"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/txtTypePending"
+        android:layout_toRightOf="@id/imgPending"
+        />
+    <TextView
+        android:id="@+id/txtQuantityPending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Số lượng"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/txtPricePending"
+        android:layout_toRightOf="@id/imgPending"
+        />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:orientation="vertical">
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnConfirmPending"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:text="Xác nhận"
+            android:background="@drawable/bk_btnlogin"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCancelPending"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:text="Hủy"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bk_btnlogin"/>
+    </LinearLayout>
+
+</RelativeLayout>

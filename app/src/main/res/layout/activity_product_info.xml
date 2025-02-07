@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Product.ProductInforActivity">
+    tools:context=".Product.ProductInfoActivity">
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,6 +28,15 @@
                     android:layout_height="match_parent"
                     android:fitsSystemWindows="true"
                     app:layout_collapseMode="parallax"/>
+                <TextView
+                    android:id="@+id/txtAmountImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:background="@drawable/bk_btnsearch"
+                    android:layout_gravity="bottom|right"
+                    android:textColor="@color/green"
+                    android:text="1/10" />
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/Toolbar"
                     android:layout_width="match_parent"
@@ -53,10 +62,10 @@
                         <RelativeLayout
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_weight="1">
+                            android:layout_marginEnd="20dp">
 
                             <ImageButton
-                                android:id="@+id/btnOder"
+                                android:id="@+id/imgOrder"
                                 android:layout_width="30dp"
                                 android:layout_height="match_parent"
                                 android:layout_alignParentRight="true"
@@ -70,11 +79,11 @@
                                 android:id="@+id/txtCount"
                                 android:layout_width="15dp"
                                 android:layout_height="15dp"
-                                android:layout_alignTop="@+id/btnOder"
-                                android:layout_alignEnd="@+id/btnOder"
+                                android:layout_alignTop="@+id/imgOrder"
+                                android:layout_alignEnd="@+id/imgOrder"
                                 android:layout_marginLeft="11dp"
-                                android:layout_marginTop="2dp"
-                                android:layout_marginEnd="-3dp"
+                                android:layout_marginTop="0dp"
+                                android:layout_marginEnd="0dp"
                                 android:background="@drawable/bg_count"
                                 android:gravity="center"
                                 android:text="0"
@@ -120,7 +129,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="7dp"
-                    android:background="@drawable/buttonoder"
+                    android:background="@drawable/bk_branch"
                     android:orientation="horizontal"
                     android:padding="16dp">
 
@@ -145,13 +154,14 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/txtInfor"
-                    android:padding="8dp"
+                    android:id="@+id/txtDetails"
+                    android:padding="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:text="@string/dummy_text"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:background="@drawable/bk_btnlogin"/>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
         <RelativeLayout
@@ -206,7 +216,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
-
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -259,8 +268,6 @@
         android:layout_alignParentBottom="true"
         android:background="@color/white"
         android:clickable="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:visibility="gone">
 
         <RelativeLayout

@@ -1,18 +1,18 @@
 package com.example.project_1_java.Card;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.example.project_1_java.Card.Adapter.OrderAdapter;
 import com.example.project_1_java.Card.Interface.DataListenerOrder;
@@ -25,9 +25,7 @@ import com.example.project_1_java.Model.OrderModel;
 import com.example.project_1_java.R;
 import com.example.project_1_java.databinding.FragmentOrderBinding;
 
-import java.sql.Struct;
 import java.util.ArrayList;
-import java.util.List;
 
 public class OrderFragment extends Fragment implements OrderContract.View, DataListenerOrder {
     private FragmentOrderBinding binding;
@@ -36,20 +34,21 @@ public class OrderFragment extends Fragment implements OrderContract.View, DataL
     private OrderAdapter adapter;
     private LoadFragment loadFragment;
     private int position = -1;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentOrderBinding.inflate(inflater,container,false);
+        binding = FragmentOrderBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter = new OrderPresenter(this,requireActivity());
+        presenter = new OrderPresenter(this, requireActivity());
         loadFragment = new LoadFragment();
         Bundle bundle = getArguments();
-        if (bundle!=null){
+        if (bundle != null) {
             ArrayList<OrderModel> result = getArguments().getParcelableArrayList("orderList");
             presenter.loadOrderList(result);
         }
@@ -73,7 +72,7 @@ public class OrderFragment extends Fragment implements OrderContract.View, DataL
         adapter = new OrderAdapter(mOrder, pos -> {
             position = pos;
             Bundle bundle = new Bundle();
-            bundle.putFloat("delivery", mOrder.get(pos).getDelivery());
+            bundle.putFloat("delivery", mOrder.get(pos).getpriceDelivery());
             DeliveryFragment fragment = new DeliveryFragment();
             fragment.setArguments(bundle);
             loadFragment(fragment);
@@ -82,9 +81,10 @@ public class OrderFragment extends Fragment implements OrderContract.View, DataL
     }
 
     @Override
-    public void onDataReceived(Float price) {
+    public void onDataReceived(Float price,String delivery) {
         if (position != -1) {
-            mOrder.get(position).setDelivery(price);
+            mOrder.get(position).setpriceDelivery(price);
+            mOrder.get(position).setDelivery(delivery);
             presenter.updateTotal();
             adapter.notifyDataSetChanged();
         }
@@ -94,7 +94,7 @@ public class OrderFragment extends Fragment implements OrderContract.View, DataL
     @Override
     public void onUpdateLocation(String name, String phone, String location, String locationPlus, int id) {
         binding.txtName.setText(name + " | " + phone);
-        binding.txtLocation.setText(locationPlus +","+ location);
+        binding.txtLocation.setText(locationPlus + "," + location);
         presenter.saveData(name, phone, location, locationPlus, id);
     }
 
@@ -116,11 +116,14 @@ public class OrderFragment extends Fragment implements OrderContract.View, DataL
 
     @Override
     public void navigateToMain() {
-        Intent intent = new Intent(getContext(), MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        requireActivity().getSupportFragmentManager().popBackStack();
-
+        Context context = getContext();
+        if (context != null) {
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        } else {
+            Log.e("OrderFragment", "Error navigateToMain");
+        }
     }
 
     @Override
@@ -131,7 +134,7 @@ public class OrderFragment extends Fragment implements OrderContract.View, DataL
 
     @Override
     public void updateOrderList(ArrayList<OrderClassifyModel> orderClassifyModels) {
-        this.mOrder = orderClassifyModels;
+        mOrder = orderClassifyModels;
     }
 
     @Override

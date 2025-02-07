@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.project_1_java.Chat.ChatActivity;
 import com.example.project_1_java.Funcion.AndroidUtils;
+import com.example.project_1_java.Funcion.FormatDate;
 import com.example.project_1_java.Model.ChatModel;
 import com.example.project_1_java.Model.UserModel;
 import com.example.project_1_java.R;
@@ -41,7 +42,7 @@ public class ResentChatAdapter extends FirestoreRecyclerAdapter<ChatModel, Resen
                 }else {
                     holder.lastMessage.setText(model.getLastMessage());
                 }
-                holder.lastTime.setText(FirebaseUtil.timeStampToString(model.getTimeStamp()));
+                holder.lastTime.setText(FormatDate.timeStampToString(model.getTimeStamp()));
                 holder.itemView.setOnClickListener(v->{
                     Intent intent = new Intent(context, ChatActivity.class);
                     AndroidUtils.passUserModelAsIntent(intent,otherUserModel);

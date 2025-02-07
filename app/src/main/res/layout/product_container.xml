@@ -38,11 +38,10 @@
                android:textSize="15dp"
                android:textStyle="bold" />
        </LinearLayout>
-       <ImageView
-           android:id="@+id/imgWaiting"
+       <include
+           android:id="@+id/incLoading"
            android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:background="@color/white"
-           android:src="@drawable/waitting"/>
+           android:layout_height="match_parent"
+           layout="@layout/item_shimmer"/>
    </RelativeLayout>
 </androidx.cardview.widget.CardView>

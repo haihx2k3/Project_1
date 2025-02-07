@@ -36,7 +36,7 @@
                         android:scaleType="centerCrop"
                         android:src="@drawable/baseline_chevron_left_24"
                         android:background="@android:color/transparent"
-                        app:tint="#FD4308"
+                        app:tint="@color/green"
                         android:layout_marginLeft="5dp"/>
 
                     <TextView

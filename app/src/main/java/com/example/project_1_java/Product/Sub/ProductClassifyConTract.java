@@ -22,7 +22,7 @@ public interface ProductClassifyConTract {
     interface Presenter {
         void loadProductDetails(String id);
 
-        void onAddToCartClicked(String title, String type, String price, String img, int count, String sellerId);
+        void onAddToCartClicked(String title, String type, String price, String img, int count, String sellerId,String seller,String avt);
 
         void onPlusClicked();
 

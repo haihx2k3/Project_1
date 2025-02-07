@@ -14,10 +14,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 
 import com.example.project_1_java.Funcion.FormatVND;
@@ -44,6 +46,7 @@ public class SellFragment extends Fragment implements SellContract.View, Classif
     private HideKeyboard hide;
     private List<Uri> imageUris;
     private String branch;
+    private List<ClassifyModel> model = new ArrayList<>();
     private FragmentSellBinding binding;
 
     @Nullable
@@ -62,6 +65,7 @@ public class SellFragment extends Fragment implements SellContract.View, Classif
         adapter = new SellAdapter(imageUris);
         binding.rcSell.setAdapter(adapter);
         presenter = new SellPresenter(this, getContext(), imageUris);
+
         setupListener();
     }
     private void setupListener() {
@@ -85,7 +89,6 @@ public class SellFragment extends Fragment implements SellContract.View, Classif
                 binding.edtPrice.addTextChangedListener(this);
             }
         });
-
         binding.btnUpLoad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,18 +101,20 @@ public class SellFragment extends Fragment implements SellContract.View, Classif
         });
 
         binding.btnClassify.setOnClickListener(v -> {
+            ClassifyFragment sub = new ClassifyFragment();
+            Bundle bundle = new Bundle();
+            if (!model.isEmpty()){
+                bundle.putParcelableArrayList("Category",new ArrayList<>(model));
+                sub.setArguments(bundle);
+            }
             new HideKeyboard(requireActivity()).hide();
             binding.frSell.setVisibility(View.VISIBLE);
             LoadFragment loadFragment = new LoadFragment();
-            loadFragment.loadFragment(this, R.id.frSell, new ClassifyFragment());
+            loadFragment.loadFragment(this, R.id.frSell,sub );
         });
 
         binding.btnAddImage.setOnClickListener(v -> {
             presenter.onAddImageClicked();
-        });
-
-        binding.imgBack.setOnClickListener(view -> {
-                getParentFragmentManager().popBackStack();
         });
         binding.imgBack.setOnClickListener(v-> getParentFragmentManager().popBackStack());
         presenter.onDataBranch();
@@ -183,7 +188,6 @@ public class SellFragment extends Fragment implements SellContract.View, Classif
                 BranchModel selectedBranch = branchModels.get(i);
                 branch = selectedBranch.getTitle();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -193,6 +197,7 @@ public class SellFragment extends Fragment implements SellContract.View, Classif
 
     @Override
     public void onDataSent(ArrayList<ClassifyModel> data) {
-       presenter.onClassifyResult(data);
+        presenter.onClassifyResult(data);
+        model = data;
     }
 }

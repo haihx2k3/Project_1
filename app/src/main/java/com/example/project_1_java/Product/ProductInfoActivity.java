@@ -1,10 +1,9 @@
 package com.example.project_1_java.Product;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -23,30 +22,31 @@ import com.bumptech.glide.request.target.Target;
 import com.example.project_1_java.Chat.ChatActivity;
 import com.example.project_1_java.Funcion.LoadFragment;
 import com.example.project_1_java.Header.Adapter.ViewpagerAdapter;
+import com.example.project_1_java.InterFace.OnClickAmount;
+import com.example.project_1_java.Product.Adapter.ViewpagerProductAdapter;
 import com.example.project_1_java.Product.Sub.ProductClassifyFragment;
 import com.example.project_1_java.R;
-import com.example.project_1_java.databinding.ActivityProductInforBinding;
+import com.example.project_1_java.databinding.ActivityProductInfoBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductInforActivity extends AppCompatActivity implements ProductContract.View {
-    private ViewPager2 viewPager2;
-    private ViewpagerAdapter adapter;
+public class ProductInfoActivity extends AppCompatActivity implements ProductContract.View {
     private ProductPresenter presenter;
     private LoadFragment loadFragment;
-    private String id, title, price, sellerId, img;
-    private ActivityProductInforBinding binding;
+    private String id, title, price, sellerId, img,details;
+    private ActivityProductInfoBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityProductInforBinding.inflate(getLayoutInflater());
+        binding = ActivityProductInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         id = getIntent().getStringExtra("id");
         title = getIntent().getStringExtra("title");
         price = getIntent().getStringExtra("price");
         sellerId = getIntent().getStringExtra("sellerId");
+        details = getIntent().getStringExtra("details");
         presenter = new ProductPresenter(this);
         loadFragment = new LoadFragment();
         setupEvent();
@@ -57,6 +57,7 @@ public class ProductInforActivity extends AppCompatActivity implements ProductCo
     private void setupEvent() {
         binding.txtTittle.setText(title);
         binding.txtPrice.setText(price);
+        binding.txtDetails.setText(details);
         presenter.onViewCreated(id, sellerId);
     }
 
@@ -84,8 +85,14 @@ public class ProductInforActivity extends AppCompatActivity implements ProductCo
     @Override
     public void showProductDetails(List<String> imageProduct) {
         img = imageProduct.get(0);
-        viewPager2 = binding.viewpagerProduct;
-        adapter = new ViewpagerAdapter((ArrayList<String>) imageProduct, viewPager2);
+        ViewPager2 viewPager2 = binding.viewpagerProduct;
+        ViewpagerProductAdapter adapter = new ViewpagerProductAdapter((ArrayList<String>) imageProduct, viewPager2, new OnClickAmount() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onAmount(int pos) {
+                binding.txtAmountImg.setText(pos+"/"+imageProduct.size());
+            }
+        });
         viewPager2.setAdapter(adapter);
         viewPager2.setOffscreenPageLimit(1);
         viewPager2.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
@@ -115,7 +122,7 @@ public class ProductInforActivity extends AppCompatActivity implements ProductCo
     }
 
     @Override
-    public void showProductsSub() {
+    public void showProductsSub(String seller,String avt) {
         binding.frShowProduct.setVisibility(View.VISIBLE);
         binding.overlay.setVisibility(View.VISIBLE);
         Bundle bundle = new Bundle();
@@ -125,6 +132,8 @@ public class ProductInforActivity extends AppCompatActivity implements ProductCo
         bundle.putString("price", price);
         bundle.putString("sellerId", sellerId);
         bundle.putString("img", img);
+        bundle.putString("avt", avt);
+        bundle.putString("sellerName", seller);
         sub.setArguments(bundle);
         loadFragment.loadFragment(this, R.id.frShowProduct, sub);
     }

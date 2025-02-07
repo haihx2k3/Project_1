@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Store.BoothClassify.PrintfOrder">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="1"
+        tools:ignore="UselessParent">
+
+        <TableRow
+            android:layout_margin="10dp"
+            tools:ignore="UselessLeaf">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Id: "
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/txtIdPrintf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="-Ouyhft88HYUtg239"
+                android:textSize="20dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_margin="10dp"
+            tools:ignore="UselessLeaf">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đến: "
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/txtInfoPrintf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="delivery information"
+                android:textSize="20dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_margin="10dp"
+            tools:ignore="UselessLeaf">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Địa chỉ: "
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/txtAddressPrintf"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:ellipsize="none"
+                android:singleLine="false"
+                android:text="Adress"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_margin="10dp"
+            tools:ignore="UselessLeaf">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tiền thu hộ: "
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/txtPricePrintf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Price (VNĐ)"
+                android:textStyle="bold"
+                android:textSize="20dp" />
+        </TableRow>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nội dung đơn hàng: "
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edtContentPrintf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bk_btnlogin"
+            android:padding="5dp"
+            android:text="Content Order"
+            android:textSize="20dp" />
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btnCancelPrintf"
+                android:layout_width="1dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Hủy"
+                />
+            <Button
+                android:id="@+id/btnConfirmPrintf"
+                android:layout_width="1dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:text="Xác nhận"
+                />
+        </LinearLayout>
+    </TableLayout>
+</ScrollView>

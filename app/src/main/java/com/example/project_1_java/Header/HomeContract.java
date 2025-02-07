@@ -16,9 +16,8 @@ public interface HomeContract {
         void showSearchActivity();
         void showChatActivity();
         void showCardActivity(boolean checkLogin);
-        void showProductActivity(String sellerId, String id, String title, String price);
+        void showProductActivity(String sellerId, String id, String title, String price,String details);
         LifecycleOwner getViewLifecycleOwner();
-        void showMoreProduct(List<ModelProduct> moreProduct);
     }
 
     interface Presenter {

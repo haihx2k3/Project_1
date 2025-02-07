@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Store.Branch.AvailableProduct">
+
+    <ImageButton
+        android:id="@+id/imgCancelAvailable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/baseline_cancel_24" />
+    <TextView
+        android:id="@+id/txtTitleAvailable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Title"
+        android:textSize="15sp"/>
+    <ImageView
+        android:id="@+id/imgAvailable"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/waitting"
+        android:layout_below="@+id/txtTitleAvailable"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcPrAvailable"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/imgAvailable"/>
+
+
+</RelativeLayout>

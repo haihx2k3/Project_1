@@ -21,14 +21,14 @@ public class ResentChatActivity extends AppCompatActivity {
         binding = ActivityResentChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setuplistener();
-        setupSearchRecycleView();
+        setupRecycleView();
     }
 
     private void setuplistener() {
         binding.imgBack.setOnClickListener(v->finish());
     }
 
-    void setupSearchRecycleView(){
+    void setupRecycleView(){
         Query query = FirebaseUtil.allChatRoomCollectionReference()
                 .whereArrayContains("userId",FirebaseUtil.currentUserId())
                 .orderBy("timeStamp",Query.Direction.DESCENDING);

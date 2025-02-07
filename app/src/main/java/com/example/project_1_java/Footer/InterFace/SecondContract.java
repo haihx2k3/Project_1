@@ -8,10 +8,12 @@ public interface SecondContract {
     }
 
     interface Presenter {
-        void onResume();
+        void onCreateStatus();
+        void loadTemporary();
         void onProfileImageClicked();
         void onLoginClicked();
         void onSettingsClicked();
         void onSellProductClicked();
+        void clearTemporaryData();
     }
 }

@@ -12,81 +12,116 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <CheckBox
-            android:id="@+id/ckOderFragment"
+        <LinearLayout
+            android:id="@+id/lnOrder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="40dp"/>
-
-        <ImageView
-            android:id="@+id/imgOder"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_alignTop="@id/ckOderFragment"
-            android:layout_toRightOf="@id/ckOderFragment"
-            android:layout_marginLeft="10dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/dr1" />
-
-        <TextView
-            android:id="@+id/txtTittleOder"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_alignStart="@id/lineOrder">
+            <ImageView
+                android:id="@+id/imgShop"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/waitting"
+                android:scaleType="centerCrop"/>
+            <TextView
+                android:id="@+id/txtNameShop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name Shop"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
+        <View
+            android:id="@+id/lineOrder"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/gray"
+            android:layout_below="@id/lnOrder"
+            android:layout_margin="10dp"/>
+        <RelativeLayout
+            android:id="@+id/rlOrder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/imgOder"
-            android:layout_alignTop="@id/imgOder"
-            android:layout_marginLeft="20dp"
-            android:text="Tên sản phẩm" />
+            android:layout_below="@id/lineOrder">
+            <CheckBox
+                android:id="@+id/ckOderFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                />
 
-        <TextView
-            android:id="@+id/txtPriceOder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtTittleOder"
-            android:layout_alignLeft="@id/txtTittleOder"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/green"
-            android:text="Giá" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtPriceOder"
-            android:layout_alignLeft="@id/txtPriceOder"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/imgMinusOder"
-                android:layout_width="19dp"
-                android:layout_height="19dp"
-                android:background="@drawable/buttonoder"
-                android:scaleType="centerInside"
-                android:src="@drawable/baseline_horizontal_rule_24" />
+            <ImageView
+                android:id="@+id/imgOder"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignTop="@id/ckOderFragment"
+                android:layout_toRightOf="@id/ckOderFragment"
+                android:layout_marginLeft="10dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/dr1" />
 
             <TextView
-                android:id="@+id/txtCountOder"
-                android:layout_width="40dp"
-                android:layout_height="19dp"
-                android:background="@drawable/buttonoder"
-                android:gravity="center"
-                android:text="1" />
+                android:id="@+id/txtTittleOder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/imgOder"
+                android:layout_alignTop="@id/imgOder"
+                android:layout_marginLeft="20dp"
+                android:text="Tên sản phẩm" />
 
-            <ImageButton
-                android:id="@+id/imgPlusOder"
-                android:layout_width="19dp"
-                android:layout_height="19dp"
-                android:background="@drawable/buttonoder"
-                android:scaleType="centerInside"
-                android:src="@drawable/baseline_add_24" />
-        </LinearLayout>
+            <TextView
+                android:id="@+id/txtPriceOder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtTittleOder"
+                android:layout_alignLeft="@id/txtTittleOder"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/green"
+                android:text="Giá" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtPriceOder"
+                android:layout_alignLeft="@id/txtPriceOder"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/imgMinusOder"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:background="@drawable/buttonoder"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/baseline_horizontal_rule_24" />
+
+                <TextView
+                    android:id="@+id/txtCountOder"
+                    android:layout_width="40dp"
+                    android:layout_height="19dp"
+                    android:background="@drawable/buttonoder"
+                    android:gravity="center"
+                    android:text="1" />
+
+                <ImageButton
+                    android:id="@+id/imgPlusOder"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:background="@drawable/buttonoder"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/baseline_add_24" />
+            </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
     <LinearLayout
         android:id="@+id/lnOverlayOder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:background="#400000FF"
+        android:background="#80000000"
+        android:clickable="true"
         android:visibility="gone">
         <ImageButton
             android:id="@+id/imgDeleteOder"
@@ -95,6 +130,7 @@
             android:src="@drawable/baseline_restore_from_trash_24"
             android:background="@android:color/transparent"
             app:tint="@color/white"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+           />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

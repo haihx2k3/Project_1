@@ -5,106 +5,55 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.project_1_java.Funcion.FormatVND;
+import com.example.project_1_java.Utils.FirebaseUtil;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FieldValue;
 
-public class OrderClassifyModel implements Parcelable {
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+public class OrderClassifyModel{
     private String idOrder;
     private String sellerId;
+    private String seller;
     private String img;
     private String title;
     private Float price;
     private String type;
-    private Integer count;
-    private Float delivery = 18.300F;
+    private int count;
+    private Float priceDelivery = 18.300F;
+    private String delivery;
+    private  String status;
     private String info;
     private String address;
+    private Object orderDate;
 
     public OrderClassifyModel() {
     }
 
-    public OrderClassifyModel(String title, String type, Float price, String img, int count, String sellerId, String idOrder) {
+    public OrderClassifyModel(String title, String type, Float price, String img, int count, String sellerId, String idOrder,String seller) {
+        this.sellerId = sellerId;
+        this.idOrder = idOrder;
+        this.seller = seller;
         this.title = title;
         this.type = type;
         this.price = price;
         this.img = img;
         this.count = count;
-        this.sellerId = sellerId;
         this.info = null;
         this.address = null;
-        this.idOrder = idOrder;
+        this.delivery = "Nhanh";
+        this.status = "Pending";
+        this.orderDate = FieldValue.serverTimestamp();
+    }
+    public String getSeller() {
+        return seller;
     }
 
-    protected OrderClassifyModel(Parcel in) {
-        idOrder = in.readString();
-        sellerId = in.readString();
-        img = in.readString();
-        title = in.readString();
-        if (in.readByte() == 0) {
-            price = null;
-        } else {
-            price = in.readFloat();
-        }
-        type = in.readString();
-        if (in.readByte() == 0) {
-            count = null;
-        } else {
-            count = in.readInt();
-        }
-        if (in.readByte() == 0) {
-            delivery = null;
-        } else {
-            delivery = in.readFloat();
-        }
-        info = in.readString();
-        address = in.readString();
+    public void setSeller(String seller) {
+        this.seller = seller;
     }
-
-    public static final Creator<OrderClassifyModel> CREATOR = new Creator<OrderClassifyModel>() {
-        @Override
-        public OrderClassifyModel createFromParcel(Parcel in) {
-            return new OrderClassifyModel(in);
-        }
-
-        @Override
-        public OrderClassifyModel[] newArray(int size) {
-            return new OrderClassifyModel[size];
-        }
-    };
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(idOrder);
-        dest.writeString(sellerId);
-        dest.writeString(img);
-        dest.writeString(title);
-        if (price == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeFloat(price);
-        }
-        dest.writeString(type);
-        if (count == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(count);
-        }
-        if (delivery == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeFloat(delivery);
-        }
-        dest.writeString(info);
-        dest.writeString(address);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    // Getters and setters...
 
     public String getTitle() {
         return title;
@@ -146,12 +95,28 @@ public class OrderClassifyModel implements Parcelable {
         this.count = count;
     }
 
-    public Float getDelivery() {
+    public Float getpriceDelivery() {
+        return priceDelivery;
+    }
+
+    public void setpriceDelivery(Float priceDelivery) {
+        this.priceDelivery = priceDelivery;
+    }
+
+    public String getDelivery() {
         return delivery;
     }
 
-    public void setDelivery(Float delivery) {
+    public void setDelivery(String delivery) {
         this.delivery = delivery;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getSellerId() {
@@ -161,7 +126,6 @@ public class OrderClassifyModel implements Parcelable {
     public void setSellerId(String sellerId) {
         this.sellerId = sellerId;
     }
-
     public String getInfo() {
         return info;
     }
@@ -186,9 +150,18 @@ public class OrderClassifyModel implements Parcelable {
         this.idOrder = idOrder;
     }
 
+    public Object getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Object orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    @SuppressLint("DefaultLocale")
     public String getTotal() {
         Float finalPrice = (price != null ? price : 0.0F);
-        Float finalDelivery = (delivery != null ? delivery : 0.0F);
-        return String.format("%.3f", finalPrice + finalDelivery);
+        Float finalpriceDelivery = (priceDelivery != null ? priceDelivery : 0.0F);
+        return String.format("%.3f", finalPrice + finalpriceDelivery);
     }
 }

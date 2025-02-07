@@ -28,7 +28,7 @@ public class PermissionManager {
         this.permissionLauncher = permissionLauncher;
         this.imagePickerLauncher = imagePickerLauncher;
     }
-    public boolean isPermissionGranted(String permission){
+    private boolean isPermissionGranted(String permission){
         return ContextCompat.checkSelfPermission(context,permission)== PackageManager.PERMISSION_GRANTED;
     }
     public void requestPermission(String permission){

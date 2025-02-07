@@ -30,61 +30,56 @@
             android:layout_gravity="center"
             android:textSize="20dp"/>
     </LinearLayout>
+    <Button
+        android:id="@+id/btnAddRcClassify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:text="Thêm giá trị phân loại"
+        android:textColor="@color/green"
+        android:textSize="15dp"
+        android:layout_below="@+id/lnCLassify1"/>
+   <ScrollView
+       android:id="@+id/scClassify"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:layout_below="@+id/btnAddRcClassify"
+       android:layout_above="@+id/lnClassify"
+       android:visibility="gone"
+       android:scrollbars="vertical">
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical">
 
+           <EditText
+               android:id="@+id/edtAddName"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:background="@color/white"
+               android:hint="Thêm nhóm phân loại"
+               android:padding="10dp"
+               android:paddingStart="20dp"
+               android:textColor="@color/black"
+               android:textSize="15dp" />
+
+           <View
+               android:layout_width="match_parent"
+               android:layout_height="1dp"
+               android:background="#CACACA" />
+
+           <androidx.recyclerview.widget.RecyclerView
+               android:id="@+id/rcClassify"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content" />
+       </LinearLayout>
+
+   </ScrollView>
     <LinearLayout
         android:id="@+id/lnClassify"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/lnCLassify1"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <EditText
-            android:id="@+id/edtAddName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:hint="Thêm nhóm phân loại"
-            android:padding="10dp"
-            android:paddingStart="20dp"
-            android:textColor="@color/black"
-            android:textSize="15dp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#CACACA" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcClassify"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/btnAddRcClassify"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:text="Thêm giá trị phân loại"
-            android:textColor="@color/green"
-            android:textSize="15dp" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btnAddClassify"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:drawableTint="@color/green"
-        android:gravity="center"
-        android:text="Thêm phân loại hàng"
-        android:textColor="@color/green"
-        android:textSize="15dp"
-        android:layout_below="@+id/lnClassify"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_alignParentBottom="true">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigation"
@@ -102,7 +97,7 @@
                 android:textColor="@color/green"
                 android:textSize="15dp" />
         </com.google.android.material.bottomnavigation.BottomNavigationView>
-    </RelativeLayout>
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/frClassify"

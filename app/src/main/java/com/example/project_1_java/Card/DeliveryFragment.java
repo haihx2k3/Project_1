@@ -19,7 +19,8 @@ import java.util.Calendar;
 
 public class DeliveryFragment extends Fragment {
     private FragmentDeliveryBinding binding;
-    private Float selectDelivery = 0F;
+    private Float priceDelivery = 0F;
+    private String delivery;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class DeliveryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Float delivery = getArguments() != null ? getArguments().getFloat("delivery", 18.300F) : null;
         if (delivery != null) {
-            selectDelivery = delivery;
+            priceDelivery = delivery;
         }
         choice();
         selected();
@@ -58,7 +59,7 @@ public class DeliveryFragment extends Fragment {
             public void onClick(View v) {
                 DataListenerOrder activity = (DataListenerOrder) getParentFragment();
                 if (activity != null) {
-                    activity.onDataReceived(selectDelivery);
+                    activity.onDataReceived(priceDelivery,delivery);
                 }
                 getParentFragmentManager().popBackStack();
             }
@@ -77,23 +78,25 @@ public class DeliveryFragment extends Fragment {
         binding.shippingMethod1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectDelivery = 18.300F;
+                priceDelivery = 18.300F;
+                delivery = "Nhanh";
                 updateUI();
             }
         });
         binding.shippingMethod2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectDelivery = 14.850F;
+                priceDelivery = 14.850F;
+                delivery = "Chậm";
                 updateUI();
             }
         });
     }
     private void updateUI() {
-        if (selectDelivery == 18.300F) {
+        if (priceDelivery == 18.300F) {
             binding.imgCheck.setVisibility(View.VISIBLE);
             binding.imgCheck2.setVisibility(View.GONE);
-        } else if (selectDelivery == 14.850F) {
+        } else if (priceDelivery == 14.850F) {
             binding.imgCheck2.setVisibility(View.VISIBLE);
             binding.imgCheck.setVisibility(View.GONE);
         }

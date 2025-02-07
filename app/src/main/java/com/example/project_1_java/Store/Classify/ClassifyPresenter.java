@@ -14,14 +14,6 @@ public class ClassifyPresenter implements ClassifyContract.Presenter {
         this.view = view;
         mListSub = new ArrayList<>();
     }
-
-
-    @Override
-    public void onAddClassifyClicked() {
-        mListSub.clear();
-        view.showVariants(mListSub);
-    }
-
     @Override
     public void onAddRcClassifyClicked() {
         view.loadFragment(new ClassifyInputFragment());
@@ -54,6 +46,11 @@ public class ClassifyPresenter implements ClassifyContract.Presenter {
     public void onEditClicked(int position) {
         selectedUpdatePosition=position;
         view.loadFragment(new UpdateClassifyFragment());
+    }
+
+    @Override
+    public void onDeleteClicked(int position) {
+        mListSub.remove(position);
     }
 
     @Override
@@ -92,5 +89,11 @@ public class ClassifyPresenter implements ClassifyContract.Presenter {
             }
             view.showVariants(mListSub);
         }
+    }
+
+    @Override
+    public void handleDataTemporary(ArrayList<ClassifyModel> temporary) {
+        mListSub = temporary;
+        view.showVariants(mListSub);
     }
 }

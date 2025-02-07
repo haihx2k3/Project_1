@@ -3,8 +3,6 @@ package com.example.project_1_java.Footer.Presenter;
 import android.content.Context;
 import android.content.Intent;
 
-import androidx.fragment.app.Fragment;
-
 import com.example.project_1_java.Footer.EditActivity;
 import com.example.project_1_java.Footer.InterFace.SecondContract;
 import com.example.project_1_java.Footer.ProfileActivity;
@@ -18,44 +16,44 @@ public class SecondPresenter implements SecondContract.Presenter {
     private String userName;
     private String avatarProfile;
     private final String userId;
+    private static boolean isFetched = false;
     private Context context;
-    public SecondPresenter(SecondContract.View view, FirebaseUtil firebaseUtil,Context context) {
+
+    public SecondPresenter(SecondContract.View view, FirebaseUtil firebaseUtil, Context context) {
         this.view = view;
         this.firebaseUtil = firebaseUtil;
-        this.userId = firebaseUtil.currentUserId();
+        this.userId = FirebaseUtil.currentUserId();
         this.context = context;
     }
+
     @Override
-    public void onResume() {
-        Context context = ((Fragment) view).requireContext();
-        boolean loginSuccess = context.getSharedPreferences("saveLogin",Context.MODE_PRIVATE).getBoolean("hide",false);
-        if (loginSuccess){
+    public void onCreateStatus() {
+        boolean loginSuccess = context.getSharedPreferences("saveLogin", Context.MODE_PRIVATE).getBoolean("hide", false);
+        if (loginSuccess) {
             view.showLoggedInState();
-            userName = null;
-            avatarProfile = null;
-            fetchUser();
-        }
-        else {
+            if (!isFetched) {
+                fetchUser();
+                isFetched = true;
+            } else {
+                loadTemporary();
+            }
+        } else {
+            isFetched = false;
             view.showLoggedOutState();
         }
     }
-
-    private void fetchUser() {
-        if (userName == null) {
-            firebaseUtil.getInfoUser((fetchedUserName) -> {
-                String user = fetchedUserName.first;
-                String avatar = fetchedUserName.second;
-                this.userName = user;
-                this.avatarProfile = avatar;
-                view.displayUserInfo(userName, avatarProfile);
-            });
-        } else {
-            view.displayUserInfo(userName, avatarProfile);
-        }
+    @Override
+    public void loadTemporary(){
+        view.showLoggedInState();
+        userName = context.getSharedPreferences("temporaryData", Context.MODE_PRIVATE).getString("userName", null);
+        avatarProfile = context.getSharedPreferences("temporaryData", Context.MODE_PRIVATE).getString("avatarProfile", null);
+        view.displayUserInfo(userName, avatarProfile);
     }
-
     @Override
     public void onProfileImageClicked() {
+        if (userName==null&&avatarProfile==null){
+            return;
+        }
         navigateToActivity(ProfileActivity.class);
 
     }
@@ -67,14 +65,27 @@ public class SecondPresenter implements SecondContract.Presenter {
 
     @Override
     public void onSettingsClicked() {
-        Context context = ((Fragment) view).getContext();
-        context.startActivity(new Intent(context, EditActivity.class));
+        if (context != null) {
+            context.startActivity(new Intent(context, EditActivity.class));
+        }
 
     }
 
     @Override
     public void onSellProductClicked() {
         navigateToActivity(ShopActivity.class);
+    }
+
+    @Override
+    public void clearTemporaryData() {
+        userName=null;
+        avatarProfile = null;
+        context.getSharedPreferences("temporaryData", Context.MODE_PRIVATE)
+                .edit()
+                .remove("userName")
+                .remove("avatarProfile")
+                .apply();
+        view.displayUserInfo(userName,avatarProfile);
     }
     private void navigateToActivity(Class<?> targetActivity) {
         Intent intent = new Intent(context, targetActivity);
@@ -83,4 +94,23 @@ public class SecondPresenter implements SecondContract.Presenter {
         intent.putExtra("uid", userId);
         context.startActivity(intent);
     }
+    private void fetchUser() {
+        firebaseUtil.getInfoUser((fetchedUserName) -> {
+            String user = fetchedUserName.first;
+            String avatar = fetchedUserName.second;
+            this.userName = user;
+            this.avatarProfile = avatar;
+            view.displayUserInfo(userName, avatarProfile);
+            saveTemporary();
+        });
+    }
+    private void saveTemporary(){
+        context.getSharedPreferences("temporaryData", Context.MODE_PRIVATE)
+                .edit()
+                .putString("userName", userName)
+                .putString("avatarProfile", avatarProfile)
+                .apply();
+    }
+
+
 }

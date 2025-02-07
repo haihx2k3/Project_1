@@ -1,6 +1,7 @@
 package com.example.project_1_java.Model;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FieldValue;
 
 import java.io.Serializable;
 
@@ -9,13 +10,13 @@ import java.util.List;
 public class ChatModel implements Serializable {
     private String chatRoom;
     private List<String> userId;
-    private Timestamp timeStamp;
+    private Object timeStamp;
     private String lastMessageSenderId;
     private String lastMessage;
 
     public ChatModel() {}
 
-    public ChatModel(String chatRoom, List<String> userId, Timestamp timeStamp, String lastMessageSenderId) {
+    public ChatModel(String chatRoom, List<String> userId, Object timeStamp, String lastMessageSenderId) {
         this.chatRoom = chatRoom;
         this.userId = userId;
         this.timeStamp = timeStamp;
@@ -37,11 +38,11 @@ public class ChatModel implements Serializable {
         this.userId = userId;
     }
 
-    public Timestamp getTimeStamp() {
+    public Object getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(Timestamp timeStamp) {
+    public void setTimeStamp(Object timeStamp) {
         this.timeStamp = timeStamp;
     }
 

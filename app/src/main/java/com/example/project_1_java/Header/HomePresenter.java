@@ -63,7 +63,7 @@ public class HomePresenter implements HomeContract.Presenter{
     @Override
     public void onProductClicked(int pos, ModelProduct product) {
         if (view != null) {
-            view.showProductActivity(product.getSellerId(), product.getId(), product.getTitle(), product.getPrice());
+            view.showProductActivity(product.getSellerId(), product.getId(), product.getTitle(), product.getPrice(), product.getDetail());
         }
     }
 

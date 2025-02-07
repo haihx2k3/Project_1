@@ -11,7 +11,6 @@ public interface ProfileContract {
         void setBirthDay(String birthDay);
         void setAvatar(Uri avatarUri);
         void finishActivity();
-        void showGenderDialog();
         void openImagePicker();
         void onSetting();
         void requestPermission();

@@ -2,6 +2,8 @@ package com.example.project_1_java.Header;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,13 +21,13 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.project_1_java.Card.CardActivity;
 import com.example.project_1_java.Chat.ResentChatActivity;
 import com.example.project_1_java.Header.Adapter.BranchHeaderAdapter;
-import com.example.project_1_java.Header.Adapter.ProductAdapter;
+import com.example.project_1_java.Product.ProductAdapter;
 import com.example.project_1_java.Header.Adapter.ViewpagerAdapter;
 import com.example.project_1_java.InterFace.OnClick;
 import com.example.project_1_java.Login.LoginActivity;
 import com.example.project_1_java.Model.BranchModel;
 import com.example.project_1_java.Model.ModelProduct;
-import com.example.project_1_java.Product.ProductInforActivity;
+import com.example.project_1_java.Product.ProductInfoActivity;
 import com.example.project_1_java.Search.SearchActivity;
 import com.example.project_1_java.databinding.FragmentHomeBinding;
 
@@ -57,10 +60,27 @@ public class HomeFragment extends Fragment implements HomeContract.View {
         viewPager = binding.viewPager2;
         presenter.onDataBranch();
         setupListener();
+        loadMoreProduct();
+    }
+
+    private void loadMoreProduct() {
+        binding.nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(@NonNull NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                View view = v.getChildAt(v.getChildCount() - 1);
+                if (view != null) {
+                    if (scrollY >= (view.getMeasuredHeight() - v.getMeasuredHeight())) {
+                        binding.txtLoading.setVisibility(View.VISIBLE);
+                        new Handler(Looper.getMainLooper()).postDelayed(()->{
+                            presenter.onDataLoad();
+                        },3000);
+                    }
+                }
+            }
+        });
     }
 
     private void setupListener() {
-        binding.imgSearch.setOnClickListener(v->presenter.onDataLoad());
         binding.btnCard.setOnClickListener(v->presenter.onCardClicked());
         binding.btnChat.setOnClickListener(v->presenter.onChatClicked());
 
@@ -96,24 +116,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                 }
             }));
         }
-        binding.rvPropose.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) {
-                    GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
-                    if (layoutManager != null) {
-                        int visibleItemCount = layoutManager.getChildCount();
-                        int totalItemCount = layoutManager.getItemCount();
-                        int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-
-                        if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount) {
-                            Log.d("RecyclerView", "Đã cuộn đến cuối danh sách");
-                        }
-                    }
-                }
-            }
-        });
+        binding.imgSearch.setOnClickListener(v->Log.d("products",products.toString()));
     }
 
     @Override
@@ -168,17 +171,13 @@ public class HomeFragment extends Fragment implements HomeContract.View {
 
 
     @Override
-    public void showProductActivity(String sellerId, String id, String title, String price) {
-        Intent intent = new Intent(getContext(), ProductInforActivity.class);
+    public void showProductActivity(String sellerId, String id, String title, String price,String details) {
+        Intent intent = new Intent(getContext(), ProductInfoActivity.class);
         intent.putExtra("sellerId", sellerId);
         intent.putExtra("id", id);
         intent.putExtra("title", title);
         intent.putExtra("price", price);
+        intent.putExtra("details", details);
         startActivity(intent);
-    }
-
-    @Override
-    public void showMoreProduct(List<ModelProduct> moreProduct) {
-
     }
 }

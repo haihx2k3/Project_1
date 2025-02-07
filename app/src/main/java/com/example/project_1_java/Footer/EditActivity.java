@@ -1,18 +1,21 @@
 package com.example.project_1_java.Footer;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.project_1_java.R;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.project_1_java.Funcion.LoadingEffect;
+import com.example.project_1_java.InterFace.OnLogOut;
 import com.example.project_1_java.databinding.ActivityEditBinding;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class EditActivity extends AppCompatActivity {
     private ActivityEditBinding binding;
     private FirebaseAuth auth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,12 +27,20 @@ public class EditActivity extends AppCompatActivity {
 
     private void setupListener() {
         binding.btnLogOut.setOnClickListener(view -> {
-            SharedPreferences sharedLogin = this.getSharedPreferences("saveLogin", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedLogin.edit();
-            editor.remove("hide");
-            editor.apply();
+            this.getSharedPreferences("temporaryData", Context.MODE_PRIVATE)
+                    .edit()
+                    .remove("userName")
+                    .remove("avatarProfile")
+                    .apply();
+            this.getSharedPreferences("saveLogin", Context.MODE_PRIVATE)
+                    .edit()
+                    .remove("hide")
+                    .apply();
             auth.signOut();
-            finish();
+            Intent resultIntent = new Intent();
+            setResult(Activity.RESULT_OK, resultIntent);
+            LoadingEffect.showLoading(this,3000, this::finish);
+
         });
     }
 }

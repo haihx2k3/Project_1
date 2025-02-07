@@ -1,10 +1,10 @@
 package com.example.project_1_java;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     private long backPressed = 0;
     private LoadFragment fragmentLoader;
     private ActivityMainBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
             fragmentLoader.loadFragment(this,R.id.frHome,new HomeFragment());
         }
         setupListener();
+        finishApp();
     }
 
     private void setupListener() {
@@ -55,14 +55,18 @@ public class MainActivity extends AppCompatActivity {
 
         });
     }
-    public void onBackPressed() {
-        if (backPressed + count > System.currentTimeMillis()) {
-            super.onBackPressed();
-            finish();
-        } else {
-            Toast.makeText(this, "Nhấn lại để thoát", Toast.LENGTH_SHORT).show();
-        }
-        backPressed = System.currentTimeMillis();
+    private void finishApp() {
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (backPressed + count > System.currentTimeMillis()) {
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Nhấn lại để thoát", Toast.LENGTH_SHORT).show();
+                    backPressed = System.currentTimeMillis();
+                }
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
     }
-
 }

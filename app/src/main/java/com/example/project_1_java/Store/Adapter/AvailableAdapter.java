@@ -11,18 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.project_1_java.InterFace.OnClickBooth;
-import com.example.project_1_java.InterFace.OnClickClassify;
-import com.example.project_1_java.Model.BoothModel;
+import com.example.project_1_java.InterFace.OnClickAvailable;
+import com.example.project_1_java.Model.AvailableModel;
 import com.example.project_1_java.R;
 
 import java.util.List;
 
 public class AvailableAdapter extends RecyclerView.Adapter<AvailableAdapter.AvailableViewHolder> {
-    private List<BoothModel> sub;
-    private OnClickBooth onClick;
+    private List<AvailableModel> sub;
+    private OnClickAvailable onClick;
 
-    public AvailableAdapter(List<BoothModel> sub,OnClickBooth onClick) {
+    public AvailableAdapter(List<AvailableModel> sub, OnClickAvailable onClick) {
         this.onClick = onClick;
         this.sub = sub;
     }
@@ -36,7 +35,7 @@ public class AvailableAdapter extends RecyclerView.Adapter<AvailableAdapter.Avai
 
     @Override
     public void onBindViewHolder(@NonNull AvailableViewHolder holder, int position) {
-        BoothModel model = sub.get(position);
+        AvailableModel model = sub.get(position);
         holder.namePr.setText(model.getTitle());
         holder.pricePr.setText(model.getPrice());
         Glide.with(holder.itemView)

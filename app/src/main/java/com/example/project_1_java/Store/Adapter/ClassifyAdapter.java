@@ -14,6 +14,7 @@ import com.example.project_1_java.InterFace.OnClickClassify;
 import com.example.project_1_java.Model.ClassifyModel;
 import com.example.project_1_java.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClassifyAdapter extends RecyclerView.Adapter<ClassifyAdapter.ClassifyViewHolder> {
@@ -38,7 +39,9 @@ public class ClassifyAdapter extends RecyclerView.Adapter<ClassifyAdapter.Classi
         holder.edit.setOnClickListener(v -> onClick.onUpdate(position));
         holder.delete.setOnClickListener(v -> {
             sub.remove(position);
-            notifyDataSetChanged();
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position,sub.size());
+            onClick.onDelete(position);
         });
 
         Glide.with(holder.itemView.getContext())

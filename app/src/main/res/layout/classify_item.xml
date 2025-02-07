@@ -2,11 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:layout_margin="10dp"
+    android:padding="10dp"
+    android:background="@color/gray">
     <ImageView
         android:id="@+id/imgItem"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:scaleType="centerCrop"
         android:src="@drawable/baseline_image_search_24"/>
 
@@ -22,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Gia"
+        android:textColor="@color/green"
         android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
         android:layout_below="@+id/txtNameClassify"

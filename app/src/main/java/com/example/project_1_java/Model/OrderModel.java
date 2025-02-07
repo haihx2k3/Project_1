@@ -16,10 +16,12 @@ public class OrderModel implements Parcelable {
     private int count;
     private Float total;
     private String sellerId;
+    private String seller;
+    private String avt;
 
     public OrderModel() {}
 
-    public OrderModel(String id, String title, String type, String price, String img, int count, Float total, String sellerId) {
+    public OrderModel(String id, String title, String type, String price, String img, int count, Float total, String sellerId,String seller,String avt) {
         this.id = id;
         this.title = title;
         this.type = type;
@@ -28,9 +30,27 @@ public class OrderModel implements Parcelable {
         this.count = count;
         this.total = total;
         this.sellerId = sellerId;
+        this.seller = seller;
+        this.avt = avt;
     }
     public String getId() {
         return id;
+    }
+
+    public String getSeller() {
+        return seller;
+    }
+
+    public void setSeller(String seller) {
+        this.seller = seller;
+    }
+
+    public String getAvt() {
+        return avt;
+    }
+
+    public void setAvt(String avt) {
+        this.avt = avt;
     }
 
     public void setId(String id) {

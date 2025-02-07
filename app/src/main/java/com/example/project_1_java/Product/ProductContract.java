@@ -6,7 +6,7 @@ public interface ProductContract {
     public interface View {
         void showProductDetails(List<String> imageProduct);
         void showSellerDetails(String avatar, String sellerId);
-        void showProductsSub();
+        void showProductsSub(String seller,String avt);
         void navigateToChat(String userName,String avatar);
     }
 

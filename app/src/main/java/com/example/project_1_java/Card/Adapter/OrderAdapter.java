@@ -48,7 +48,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         updateDeliveryDay(holder);
 
-        if (model.getDelivery() == 18.300F) {
+        if (model.getpriceDelivery() == 18.300F) {
             holder.deliveryFast.setVisibility(View.VISIBLE);
             holder.deliveryLow.setVisibility(View.GONE);
         } else {

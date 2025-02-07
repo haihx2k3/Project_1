@@ -2,17 +2,17 @@ package com.example.project_1_java.Model;
 
 import java.util.List;
 
-public class BoothModel {
+public class AvailableModel {
     private String id;
     private String sellerId;
     private String title;
     private String price;
     private List<String> uriList;
 
-    public BoothModel() {
+    public AvailableModel() {
     }
 
-    public BoothModel(String id, String sellerId, String title, String price, List<String> uriList) {
+    public AvailableModel(String id, String sellerId, String title, String price, List<String> uriList) {
         this.id = id;
         this.sellerId = sellerId;
         this.title = title;

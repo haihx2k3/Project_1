@@ -19,13 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SellPresenter implements SellContract.Presenter{
-    private SellContract.View view;
-    private Context context;
-    private List<Uri> imageUris;
-    private SellViewModel viewModel;
-    private List<ClassifyModel> listClassify = new ArrayList<>();
+    private final SellContract.View view;
+    private final Context context;
+    private final List<Uri> imageUris;
+    private final SellViewModel viewModel;
+    private final List<ClassifyModel> listClassify = new ArrayList<>();
     List<BranchModel> branchModels = new ArrayList<>();
-    private ActivityResultLauncher<String> pickImage;
+    private final ActivityResultLauncher<String> pickImage;
     public  SellPresenter(SellContract.View view ,Context context,List<Uri> imageUris){
         this.view = view;
         this.context = context;

@@ -33,7 +33,7 @@ public class OrderPresenter implements OrderContract.Presenter {
     public void loadOrderList(ArrayList<OrderModel> mOrder) {
         this.orderList = new ArrayList<>();
         for (OrderModel order : mOrder) {
-            this.orderList.add(new OrderClassifyModel(order.getTitle(), order.getType(), order.getTotal(), order.getImg(), order.getCount(), order.getSellerId(), order.getId()));
+            this.orderList.add(new OrderClassifyModel(order.getTitle(), order.getType(), order.getTotal(), order.getImg(), order.getCount(), order.getSellerId(), order.getId(),order.getSeller()));
             view.updateOrderList(orderList);
         }
         showTotal();
@@ -55,10 +55,9 @@ public class OrderPresenter implements OrderContract.Presenter {
             return;
         }
         for (int i = 0; i < orderList.size(); i++) {
-            FirebaseUtil util = new FirebaseUtil();
-            util.addItemOder(
+            new FirebaseUtil().addItemOder(
                     orderList.get(i).getSellerId(),  orderList.get(i).getIdOrder(),
-                    orderList.get(i).getIdOrder(), orderList.get(i), new Runnable() {
+                    orderList.get(i), new Runnable() {
                         @Override
                         public void run() {
                             view.navigateToMain();

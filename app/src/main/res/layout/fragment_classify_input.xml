@@ -37,6 +37,8 @@
         android:hint="Nhập tên sản phẩm"
         android:padding="10dp"
         android:textSize="15dp"
+        android:imeOptions="actionNext"
+        android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
     <EditText

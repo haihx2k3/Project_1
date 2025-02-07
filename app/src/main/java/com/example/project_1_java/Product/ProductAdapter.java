@@ -1,4 +1,4 @@
-package com.example.project_1_java.Header.Adapter;
+package com.example.project_1_java.Product;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
@@ -58,13 +58,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        holder.imageWaiting.setVisibility(View.GONE);
+                        holder.loading.setVisibility(View.GONE);
                         return false;
                     }
 
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        holder.imageWaiting.setVisibility(View.GONE);
+                        holder.loading.setVisibility(View.GONE);
                         return false;
                     }
                 })
@@ -77,15 +77,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
     }
 
     public static class ProductHolder extends RecyclerView.ViewHolder {
-        ImageView imageView,imageWaiting;
+        ImageView imageView;
         TextView title, price;
-
+        View loading;
         public ProductHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.image_propose);
-            imageWaiting = itemView.findViewById(R.id.imgWaiting);
             title = itemView.findViewById(R.id.txtTitleProduct);
             price = itemView.findViewById(R.id.txtPriceProduct);
+            loading = itemView.findViewById(R.id.incLoading);
         }
     }
     public void addItems(List<ModelProduct> newItems) {
@@ -93,5 +93,4 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         product.addAll(newItems);
         notifyItemRangeInserted(previousSize, newItems.size());
     }
-
 }

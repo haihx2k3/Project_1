@@ -3,19 +3,24 @@ package com.example.project_1_java.Login;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
+import com.example.project_1_java.Footer.SecondHomeFragment;
+import com.example.project_1_java.Funcion.LoadingEffect;
+import com.example.project_1_java.InterFace.OnLogIn;
+import com.example.project_1_java.InterFace.OnLogOut;
 import com.example.project_1_java.Model.UserModel;
-import com.example.project_1_java.R;
 import com.example.project_1_java.Utils.FirebaseUtil;
 import com.example.project_1_java.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,7 +71,6 @@ public class LoginActivity extends AppCompatActivity {
         binding.btnLoginPhone.setOnClickListener(v -> {
             String otp = binding.edtOTP.getText().toString();
             if (verificationCode.isEmpty()) {
-                binding.edtOTP.setError("OTP không đúng");
                 return;
             }
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, otp);
@@ -87,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void sendOtp(String phone, boolean isResend) {
         startResendTimer();
-
+        onClickOtp();
         PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks =
                 new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                     @Override
@@ -97,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onVerificationFailed(@NonNull FirebaseException e) {
-                        Log.d("Error", e.toString());
+                        Log.d("Error OTP", e.toString());
                     }
 
                     @Override
@@ -163,22 +167,20 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUtil.currentUserDetails().get().addOnCompleteListener(userCheckTask -> {
                             if (userCheckTask.isSuccessful() && userCheckTask.getResult().exists()) {
-                                finish();
-                                saveButtonState(true);
+                                successOtp();
                             } else {
                                 userModel = new UserModel(FirebaseUtil.currentUserId(), generateRandomString(10), Timestamp.now(), "", "", "", phone);
                                 FirebaseUtil.currentUserDetails().set(userModel).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
-                                        finish();
-                                        saveButtonState(true);
+                                        successOtp();
                                     }
                                 });
                             }
                         });
 
                     } else {
-                        Toast.makeText(this, "OTP not valid", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(this.getCurrentFocus(), "Xác nhận không thành công", Snackbar.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -189,5 +191,21 @@ public class LoginActivity extends AppCompatActivity {
                 .edit()
                 .putBoolean("hide", hidden)
                 .apply();
+    }
+
+    private void onClickOtp() {
+        binding.edtPhone.setVisibility(View.GONE);
+        binding.edtOTP.setVisibility(View.VISIBLE);
+        binding.btnOtp.setVisibility(View.GONE);
+        binding.btnLoginPhone.setVisibility(View.VISIBLE);
+    }
+
+    private void successOtp() {
+        LoadingEffect.showLoading(this,3000,()->{
+            Intent resultIntent = new Intent();
+            setResult(Activity.RESULT_OK, resultIntent);
+            saveButtonState(true);
+            finish();
+        });
     }
 }

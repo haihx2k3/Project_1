@@ -1,5 +1,6 @@
 package com.example.project_1_java.Card.Adapter;
 
+import android.annotation.SuppressLint;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,14 +26,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     private final FirebaseUtil util;
     private final OnCheck onCheck;
     private List<OrderModel> orders;
-    private final FormatVND fmt;
     private final SparseBooleanArray checkStates;
 
     public CardAdapter(List<OrderModel> orders, OnCheck onCheck) {
         this.onCheck = onCheck;
         this.orders = orders;
         this.util = new FirebaseUtil();
-        this.fmt = new FormatVND();
         this.checkStates = new SparseBooleanArray();
     }
 
@@ -44,20 +43,20 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     }
 
     @Override
+    @SuppressLint("DefaultLocale")
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
         OrderModel model = orders.get(position);
         final int[] count = {model.getCount()};
 
         holder.title.setText(model.getTitle());
-        holder.price.setText(fmt.formatCurrency(String.format("%.3f", model.getTotal())));
+        holder.price.setText(FormatVND.formatCurrency(String.format("%.3f", model.getTotal())));
         holder.count.setText(String.valueOf(count[0]));
         holder.check.setOnCheckedChangeListener(null);
         holder.check.setChecked(checkStates.get(position, false));
 
         holder.check.setOnCheckedChangeListener((buttonView, isChecked) -> updateCheckState(position, isChecked));
-
         holder.itemView.setOnLongClickListener(v -> showOverlay(holder, position, model.getId()));
-
+        holder.itemView.setOnClickListener(v->holder.overLay.setVisibility(View.GONE));
         holder.plus.setOnClickListener(v -> updateItemCount(holder, model, ++count[0], position,true));
 
         holder.minus.setOnClickListener(v -> {
@@ -66,7 +65,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
                 removeItem(position, model.getId());
             }
         });
-
+        holder.shopName.setText(model.getSeller());
+        Glide.with(holder.imgShop).load(model.getAvt()).placeholder(R.drawable.profile).into(holder.imgShop);
         Glide.with(holder.image).load(model.getImg()).placeholder(R.drawable.waitting).into(holder.image);
     }
 
@@ -75,11 +75,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         if (isChecked) onCheck.onCheck(position);
         else onCheck.onUnCheck(position);
     }
-
-    private void updateItemCount(CardViewHolder holder, OrderModel model, int newCount, int position,boolean calculate) {
+    @SuppressLint("DefaultLocale")
+    private void updateItemCount(CardViewHolder holder, OrderModel model, int newCount, int position, boolean calculate) {
         holder.count.setText(String.valueOf(newCount));
-        float totalPrice = fmt.convertStringToFloat(model.getPrice()) * newCount;
-        holder.price.setText(fmt.formatCurrency(String.format("%.3f", totalPrice)));
+        float totalPrice = FormatVND.convertStringToFloat(model.getPrice()) * newCount;
+        holder.price.setText(FormatVND.formatCurrency(String.format("%.3f", totalPrice)));
         util.updateOder(model.getId(), newCount, totalPrice);
         if (calculate){
             onCheck.onCheckPlus(position);
@@ -93,8 +93,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
     private boolean showOverlay(CardViewHolder holder, int position, String orderId) {
         holder.overLay.setVisibility(View.VISIBLE);
-        holder.overLay.setOnClickListener(v -> holder.overLay.setVisibility(View.GONE));
-        holder.delete.setOnClickListener(v -> removeItem(position, orderId));
+        holder.delete.setOnClickListener(v -> {
+            holder.check.setChecked(false);
+            removeItem(position, orderId);
+        });
         return true;
     }
 
@@ -105,9 +107,24 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
 
     private void removeItem(int position, String orderId) {
         orders.remove(position);
-        checkStates.delete(position);
+
+        SparseBooleanArray newCheckStates = new SparseBooleanArray();
+        for (int i = 0; i < checkStates.size(); i++) {
+            int key = checkStates.keyAt(i);
+            if (key < position) {
+                newCheckStates.put(key, checkStates.get(key));
+            } else if (key > position) {
+                newCheckStates.put(key - 1, checkStates.get(key));
+            }
+        }
+        checkStates.clear();
+        for (int i = 0; i < newCheckStates.size(); i++) {
+            checkStates.put(newCheckStates.keyAt(i), newCheckStates.valueAt(i));
+        }
+
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, orders.size());
+
         util.deleteOder(orderId);
         onCheck.updateCheckedCount(getCheckedItemCount());
     }
@@ -140,9 +157,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     }
 
     public static class CardViewHolder extends RecyclerView.ViewHolder {
-        ImageView image, plus, minus, delete;
-        TextView title, price, count;
-        LinearLayout overLay;
+        ImageView image, plus, minus, delete,imgShop;
+        TextView title, price, count,shopName;
+        View overLay;
         CheckBox check;
 
         public CardViewHolder(@NonNull View itemView) {
@@ -156,6 +173,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             overLay = itemView.findViewById(R.id.lnOverlayOder);
             delete = itemView.findViewById(R.id.imgDeleteOder);
             check = itemView.findViewById(R.id.ckOderFragment);
+            imgShop = itemView.findViewById(R.id.imgShop);
+            shopName = itemView.findViewById(R.id.txtNameShop);
         }
     }
 }

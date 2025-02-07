@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 
-public class ClassifyModel implements Serializable {
+public class ClassifyModel implements Parcelable {
     private String title;
     private String price;
     private String img;
@@ -45,6 +45,34 @@ public class ClassifyModel implements Serializable {
     }
     public ClassifyModel copy(String img) {
         return new ClassifyModel(this.title, this.price, img);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    protected ClassifyModel(Parcel in) {
+        title = in.readString();
+        price = in.readString();
+        img = in.readString();
+    }
+
+    public static final Creator<ClassifyModel> CREATOR = new Creator<ClassifyModel>() {
+        @Override
+        public ClassifyModel createFromParcel(Parcel in) {
+            return new ClassifyModel(in);
+        }
+
+        @Override
+        public ClassifyModel[] newArray(int size) {
+            return new ClassifyModel[size];
+        }
+    };
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(title!=null ? title:"");
+        dest.writeString(price!=null ? price:"");
+        dest.writeString(img!=null ? img:"");
     }
 
 }

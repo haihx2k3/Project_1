@@ -14,6 +14,7 @@ public class ChatPresenter implements ChatContract.Presenter{
     private final ChatContract.View view;
     private final String userId,avatar,userName;
     private final FirebaseUser currentUser;
+    private FieldValue fieldValue;
     private String chatRoomId;
     private ChatModel chat;
     public ChatPresenter(ChatContract.View view, String userId, String userName ,String avatar){
@@ -23,6 +24,7 @@ public class ChatPresenter implements ChatContract.Presenter{
         this.avatar = avatar;
         this.currentUser = FirebaseAuth.getInstance().getCurrentUser();
         this.chatRoomId = new FirebaseUtil().getChatRoomId(currentUser.getUid(),userId);
+        this.fieldValue = FieldValue.serverTimestamp();
     }
     @Override
     public void setupChat(String userName,String avatar) {
@@ -40,7 +42,7 @@ public class ChatPresenter implements ChatContract.Presenter{
                     chat = new ChatModel(
                             chatRoomId,
                             Arrays.asList(currentUser.getUid(), userId),
-                            Timestamp.now(),
+                            fieldValue,
                             ""
                     );
                     new FirebaseUtil().getChatRoomReference(chatRoomId).set(chat);
@@ -51,16 +53,14 @@ public class ChatPresenter implements ChatContract.Presenter{
 
     @Override
     public void sendMessage(String message) {
-        chat.setTimeStamp(Timestamp.now());
+        chat.setTimeStamp(fieldValue);
         chat.setLastMessageSenderId(currentUser.getUid());
         chat.setLastMessage(message);
         new FirebaseUtil().getChatRoomReference(chatRoomId).set(chat);
-
         HashMap<String, Object> chatMessage = new HashMap<>();
         chatMessage.put("message", message);
         chatMessage.put("senderId", currentUser.getUid());
         chatMessage.put("timestamp", FieldValue.serverTimestamp());
-
         new FirebaseUtil().getChatRoomMessageReferences(chatRoomId).add(chatMessage);
     }
 }

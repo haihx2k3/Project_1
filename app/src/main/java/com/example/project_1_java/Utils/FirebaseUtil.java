@@ -1,8 +1,6 @@
 package com.example.project_1_java.Utils;
 
-import android.annotation.SuppressLint;
-
-import com.example.project_1_java.Model.BoothModel;
+import com.example.project_1_java.Model.AvailableModel;
 import com.example.project_1_java.Model.ClassifyModel;
 import com.example.project_1_java.Model.ImageModel;
 import com.example.project_1_java.Model.ModelProduct;
@@ -10,7 +8,6 @@ import com.example.project_1_java.Model.OrderClassifyModel;
 import com.example.project_1_java.Model.OrderModel;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -18,9 +15,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.Source;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.gson.Gson;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,17 +34,25 @@ public class FirebaseUtil {
     public static DocumentReference currentUserDetails() {
        return FirebaseFirestore.getInstance().collection("Users").document(currentUserId());
     }
+
+    public DocumentReference getChatRoomReference(String chatRoomId) {
+        return FirebaseFirestore.getInstance().collection("chatRooms").document(chatRoomId);
+    }
+    public CollectionReference getChatRoomMessageReferences(String chatRoomId) {
+        return getChatRoomReference(chatRoomId).collection("chats");
+    }
+    public String getChatRoomId(String userId1, String userId2) {
+        return userId1.hashCode() < userId2.hashCode()
+                ? userId1 + "_" + userId2
+                : userId2 + "_" + userId1;
+    }
     public static CollectionReference allChatRoomCollectionReference(){
         return FirebaseFirestore.getInstance().collection("chatRooms");
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    public static String timeStampToString(Timestamp timestamp){
-        return new SimpleDateFormat("HH:mm").format(timestamp.toDate());
     }
     public static CollectionReference allUserCollectionReference(){
         return FirebaseFirestore.getInstance().collection("Users");
     }
+
     public static DocumentReference getOtherUserFromChatroom(List<String> userId){
         if (userId.get(0).equals(FirebaseUtil.currentUserId())){
             return allUserCollectionReference().document(userId.get(1));
@@ -108,20 +113,7 @@ public class FirebaseUtil {
                 .addOnFailureListener(exception -> callback.onResult(new Pair<>(null, null)));
     }
 
-    public DocumentReference getChatRoomReference(String chatRoomId) {
-        return FirebaseFirestore.getInstance().collection("chatRooms").document(chatRoomId);
-    }
 
-    public CollectionReference getChatRoomMessageReferences(String chatRoomId) {
-        return getChatRoomReference(chatRoomId).collection("chats");
-    }
-
-    public String getChatRoomId(String userId1, String userId2) {
-        return userId1.hashCode() < userId2.hashCode()
-                ? userId1 + "_" + userId2
-                : userId2 + "_" + userId1;
-    }
-    @SuppressWarnings("unchecked")
     public void addProduct(String id,String branch, ModelProduct item, Runnable onSuccess, FailureCallback onFailure) {
         List<Task<Void>> tasks = new ArrayList<>();
         tasks.add(firestore.collection("Product").document(id).set(item));
@@ -140,13 +132,30 @@ public class FirebaseUtil {
                 .addOnFailureListener(e -> onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error occurred"));
     }
 
-    public void addItemOder(String sellerId, String idStatus, String idOder, OrderClassifyModel item, Runnable onSuccess, FailureCallback onFailure) {
-        firestore.collection("StatusOrder").document(sellerId).collection("status").document(idStatus).set(item)
-                .addOnSuccessListener(aVoid -> {
-                    firestore.collection("Card").document(currentUserId()).collection("card").document(idOder).delete();
-                    onSuccess.run();
-                })
-                .addOnFailureListener(e -> onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error occurred"));
+    public void addItemOder(String sellerId, String idOder, OrderClassifyModel item, Runnable onSuccess, FailureCallback onFailure) {
+        WriteBatch batch = firestore.batch();
+        DocumentReference pendingRef = firestore.collection("Booth").document(sellerId).collection("Pending").document(idOder);
+        DocumentReference statusRef = firestore.collection("OrderBuyer").document(currentUserId()).collection("status").document(idOder);
+        DocumentReference cardRef = firestore.collection("Card").document(currentUserId()).collection("card").document(idOder);
+        batch.set(pendingRef, item);
+        batch.set(statusRef, item);
+        batch.delete(cardRef);
+        batch.commit()
+                .addOnSuccessListener(aVoid -> onSuccess.run())
+                .addOnFailureListener(e -> onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error addItemOrder"));
+
+    }
+    public void addItemSending(String sellerId,String idOder, OrderClassifyModel item, Runnable onSuccess, FailureCallback onFailure) {
+        WriteBatch batch = firestore.batch();
+        DocumentReference sendingRef = firestore.collection("Booth").document(sellerId).collection("Sending").document(idOder);
+        DocumentReference pendingRef = firestore.collection("Booth").document(sellerId).collection("Pending").document(idOder);
+        batch.set(sendingRef, item);
+        batch.update(sendingRef, "status","Sending");
+        batch.delete(pendingRef);
+        batch.commit()
+                .addOnSuccessListener(aVoid -> onSuccess.run())
+                .addOnFailureListener(e -> onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error addItemOrder"));
+
     }
     public void addAds(String id, ImageModel image, Runnable onSuccess, FailureCallback onFailure) {
         firestore.collection("Ads").document(id).set(image)
@@ -156,7 +165,7 @@ public class FirebaseUtil {
     public void getItemProduct(ItemCallback<List<ModelProduct>> onSuccess, FailureCallback onFailure) {
         if (isLoading) return;
         isLoading = true;
-        Query query = firestore.collection("Product").limit(5);
+        Query query = firestore.collection("Product").limit(10);
         if (lastData!=null){
             query = query.startAfter(lastData);
         }
@@ -241,17 +250,102 @@ public class FirebaseUtil {
                 .addOnFailureListener(e -> onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error occurred get Card"));
     }
 
-    public void getItemToBooth(ItemCallback<List<BoothModel>> onSuccess, FailureCallback onFailure) {
-        firestore.collection("Booth").document(currentUserId()).collection("Available").get()
-                .addOnSuccessListener(result -> {
-                    List<BoothModel> itemList = new ArrayList<>();
-                    for (DocumentSnapshot document : result.getDocuments()) {
-                        BoothModel item = document.toObject(BoothModel.class);
-                        itemList.add(item);
+    public void getItemAvailable(ItemCallback<List<AvailableModel>> onSuccess, FailureCallback onFailure) {
+        if (isLoading) return;
+        isLoading = true;
+        Query query = firestore.collection("Booth").document(currentUserId()).collection("Available").limit(10);
+        if (lastData!=null){
+            query = query.startAfter(lastData);
+        }
+        query.get().addOnSuccessListener(result->{
+                    List<AvailableModel> itemList = new ArrayList<>();
+                    if (result != null && !result.getDocuments().isEmpty()) {
+                        for (DocumentSnapshot document : result.getDocuments()) {
+                            AvailableModel item = document.toObject(AvailableModel.class);
+                            if (item != null) {
+                                itemList.add(item);
+                            }
+                        }
+                        lastData = result.getDocuments().get(result.size() - 1);
                     }
+                    isLoading = false;
                     onSuccess.onResult(itemList);
                 })
-                .addOnFailureListener(e -> onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error occurred get Booth"));
+                .addOnFailureListener(e -> {
+                    isLoading = false;
+                    onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error get item to Available");
+                });
+    }
+    public void getItemPending(ItemCallback<List<OrderClassifyModel>> onSuccess, FailureCallback onFailure) {
+        if (isLoading) return;
+        isLoading = true;
+        Query query = firestore.collection("Booth").document(currentUserId()).collection("Pending").limit(10);
+        if (lastData!=null){
+            query = query.startAfter(lastData);
+        }
+        query.get().addOnSuccessListener(result->{
+                    List<OrderClassifyModel> itemList = new ArrayList<>();
+                    if (result != null && !result.getDocuments().isEmpty()) {
+                        for (DocumentSnapshot document : result.getDocuments()) {
+                            OrderClassifyModel item = document.toObject(OrderClassifyModel.class);
+                            if (item != null) {
+                                itemList.add(item);
+                            }
+                        }
+                        lastData = result.getDocuments().get(result.size() - 1);
+                    }
+                    isLoading = false;
+                    onSuccess.onResult(itemList);
+                })
+                .addOnFailureListener(e -> {
+                    isLoading = false;
+                    onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error get item to Pending");
+                });
+    }
+    public void getItemSending(ItemCallback<List<OrderClassifyModel>> onSuccess, FailureCallback onFailure) {
+        if (isLoading) return;
+        isLoading = true;
+        Query query = firestore.collection("Booth").document(currentUserId()).collection("Sending").limit(10);
+        if (lastData!=null){
+            query = query.startAfter(lastData);
+        }
+        query.get().addOnSuccessListener(result->{
+                    List<OrderClassifyModel> itemList = new ArrayList<>();
+                    if (result != null && !result.getDocuments().isEmpty()) {
+                        for (DocumentSnapshot document : result.getDocuments()) {
+                            OrderClassifyModel item = document.toObject(OrderClassifyModel.class);
+                            if (item != null) {
+                                itemList.add(item);
+                            }
+                        }
+                        lastData = result.getDocuments().get(result.size() - 1);
+                    }
+                    isLoading = false;
+                    onSuccess.onResult(itemList);
+                })
+                .addOnFailureListener(e -> {
+                    isLoading = false;
+                    onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error get item to Sending");
+                });
+    }
+    public void getCategory(String id,ItemCallback<List<ClassifyModel>> onSuccess,FailureCallback onFailure){
+        firestore.collection("Booth").document(currentUserId()).collection("Available").document(id).get()
+                .addOnSuccessListener(result -> {
+                    if (result.exists()) {
+                        List<HashMap<String, Object>> subList = (List<HashMap<String, Object>>) result.get("classify");
+                        ArrayList<ClassifyModel> sub = new ArrayList<>();
+                        Gson gson = new Gson();
+                        if (subList != null) {
+                            for (HashMap<String, Object> map : subList) {
+                                String json = gson.toJson(map);
+                                ClassifyModel model = gson.fromJson(json, ClassifyModel.class);
+                                sub.add(model);
+                            }
+                        }
+                        onSuccess.onResult(sub);
+                    }
+                })
+                .addOnFailureListener(e -> onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error occurred"));
     }
 
     public void updateOder(String id, int count, Float total) {
