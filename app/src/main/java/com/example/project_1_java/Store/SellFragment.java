@@ -1,38 +1,44 @@
 package com.example.project_1_java.Store;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+
+import com.bumptech.glide.Glide;
 import com.example.project_1_java.Funcion.FormatVND;
 import com.example.project_1_java.Funcion.HideKeyboard;
 import com.example.project_1_java.Funcion.LoadFragment;
 import com.example.project_1_java.Model.BranchModel;
 import com.example.project_1_java.Model.ClassifyModel;
 import com.example.project_1_java.R;
-import com.example.project_1_java.Store.Adapter.SellAdapter;
 import com.example.project_1_java.Store.Adapter.BranchStoreAdapter;
+import com.example.project_1_java.Store.Adapter.SellAdapter;
 import com.example.project_1_java.Store.Classify.ClassifyFragment;
 import com.example.project_1_java.Store.InterFace.ClassifyReceived;
 import com.example.project_1_java.Store.InterFace.SellContract;
+import com.example.project_1_java.Utils.PermissionManager;
 import com.example.project_1_java.databinding.FragmentSellBinding;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -44,10 +50,12 @@ public class SellFragment extends Fragment implements SellContract.View, Classif
     private SellContract.Presenter presenter;
     private SellAdapter adapter;
     private HideKeyboard hide;
-    private List<Uri> imageUris;
     private String branch;
-    private List<ClassifyModel> model = new ArrayList<>();
+    private ActivityResultLauncher<Intent> pickImageLauncher;
+    private ActivityResultLauncher<String> permissionLauncher;
+    private PermissionManager permissionManager;
     private FragmentSellBinding binding;
+    private LoadFragment loadFragment;
 
     @Nullable
     @Override
@@ -60,15 +68,43 @@ public class SellFragment extends Fragment implements SellContract.View, Classif
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         hide = new HideKeyboard(requireActivity());
-        imageUris = new ArrayList<>();
-        binding.rcSell.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false));
-        adapter = new SellAdapter(imageUris);
-        binding.rcSell.setAdapter(adapter);
-        presenter = new SellPresenter(this, getContext(), imageUris);
-
-        setupListener();
+        presenter = new SellPresenter(this, getContext());
+        loadFragment = new LoadFragment();
+        setupView();
+        setupRsLauncher();
+        setupRecycleView();
+        permissionManager = new PermissionManager(this,permissionLauncher,pickImageLauncher);
     }
-    private void setupListener() {
+
+    private void setupRecycleView() {
+        adapter = new SellAdapter(new ArrayList<>());
+        binding.rcSell.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false));
+        binding.rcSell.setAdapter(adapter);
+    }
+
+    private void setupRsLauncher() {
+        //Set avatar for UI
+        pickImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result->{
+            if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                Uri selectedImageUri = result.getData().getData();
+                if (selectedImageUri != null) {
+                    List<Uri> uriList = new ArrayList<>();
+                    uriList.add(selectedImageUri);
+                    presenter.handleImagePicked(uriList);
+                }
+            }
+        });
+        //Check permission conditions
+        permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if (isGranted) {
+                presenter.onPermissionGranted();
+            } else {
+                presenter.onPermissionDenied();
+            }
+        });
+    }
+    private void setupView() {
+        //Format price
         binding.edtPrice.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -101,31 +137,26 @@ public class SellFragment extends Fragment implements SellContract.View, Classif
         });
 
         binding.btnClassify.setOnClickListener(v -> {
-            ClassifyFragment sub = new ClassifyFragment();
-            Bundle bundle = new Bundle();
-            if (!model.isEmpty()){
-                bundle.putParcelableArrayList("Category",new ArrayList<>(model));
-                sub.setArguments(bundle);
-            }
             new HideKeyboard(requireActivity()).hide();
-            binding.frSell.setVisibility(View.VISIBLE);
-            LoadFragment loadFragment = new LoadFragment();
-            loadFragment.loadFragment(this, R.id.frSell,sub );
+            presenter.openCategory();
         });
 
         binding.btnAddImage.setOnClickListener(v -> {
-            presenter.onAddImageClicked();
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermission();
+            } else {
+                presenter.onOpenImage();
+            }
         });
         binding.imgBack.setOnClickListener(v-> getParentFragmentManager().popBackStack());
         presenter.onDataBranch();
     }
-
-    @SuppressLint("NotifyDataSetChanged")
+    //Update recycle view
     @Override
-    public void showImages() {
-        adapter.notifyDataSetChanged();
+    public void showImages(List<Uri> uriList) {
+        adapter.updateData(uriList);
     }
-
+    //Effect
     @Override
     public void showLoading() {
         AlertDialog.Builder build = new AlertDialog.Builder(getContext(), R.style.Loading);
@@ -135,12 +166,12 @@ public class SellFragment extends Fragment implements SellContract.View, Classif
         dialog.setCancelable(false);
         dialog.show();
     }
-
+    //hide effect
     @Override
     public void hideLoading() {
         dialog.dismiss();
     }
-
+    //completion notice
     @Override
     public void showSuccessDialog() {
         AlertDialog.Builder build = new AlertDialog.Builder(getContext(), R.style.ThemeCustomDialog);
@@ -168,8 +199,7 @@ public class SellFragment extends Fragment implements SellContract.View, Classif
         binding.edtDescribe.setText("");
         binding.edtPrice.setText("");
         binding.edtTittle.requestFocus();
-        imageUris.clear();
-        adapter.notifyDataSetChanged();
+        adapter.clearData();
 
     }
 
@@ -178,7 +208,7 @@ public class SellFragment extends Fragment implements SellContract.View, Classif
         Snackbar.make(getView(),message,Snackbar.LENGTH_SHORT).show();
 
     }
-
+    //Processing branch
     @Override
     public void showBranch(List<BranchModel> branchModels) {
         binding.spnBranch.setAdapter(new BranchStoreAdapter(requireActivity(),branchModels));
@@ -196,8 +226,28 @@ public class SellFragment extends Fragment implements SellContract.View, Classif
     }
 
     @Override
+    public void openImagePicker() {
+        permissionManager.openImagePicker();
+    }
+    //open settings on android
+    @Override
+    public void onSetting() {
+        permissionManager.showPermissionRationaleDialog();
+    }
+
+    @Override
+    public void requestPermission() {
+        permissionManager.requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+    }
+
+    @Override
+    public void showFragment(ClassifyFragment fragment) {
+        binding.frSell.setVisibility(View.VISIBLE);
+        loadFragment.loadFragment(this,R.id.frSell,fragment);
+    }
+
+    @Override
     public void onDataSent(ArrayList<ClassifyModel> data) {
         presenter.onClassifyResult(data);
-        model = data;
     }
 }

@@ -22,10 +22,10 @@ public class ShopActivity extends AppCompatActivity {
         binding = ActivitySellBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         loadFragment = new LoadFragment();
-        setupListener();
+        setupView();
         getDataFromFooter();
     }
-
+    //Get data
     private void getDataFromFooter() {
         userName = getIntent().getStringExtra("name");
         binding.txtUserNameShop.setText(userName);
@@ -34,8 +34,9 @@ public class ShopActivity extends AppCompatActivity {
         Glide.with(this).load(avatar).placeholder(R.drawable.profile).into(binding.cirImgShop);
     }
 
-    private void setupListener() {
+    private void setupView() {
         binding.imgBack.setOnClickListener(view -> finish());
+        //Send data
         binding.lnMyProduct.setOnClickListener(v-> {
             Fragment sub = new BoothFragment();
             Bundle bundle = new Bundle();
@@ -45,6 +46,7 @@ public class ShopActivity extends AppCompatActivity {
         });
         binding.lnSell.setOnClickListener(v->load(new SellFragment()));
     }
+    //Open fragment
     private void load(Fragment fr){
         binding.frSellMain.setVisibility(View.VISIBLE);
         loadFragment.loadFragment(this,R.id.frSellMain,fr);

@@ -22,5 +22,7 @@ public interface LocationContract {
         void fetchAddress(double latitude, double longitude);
         void onSetting();
         void onPermissionGranted();
+        void stopLocationUpdates();
+
     }
 }

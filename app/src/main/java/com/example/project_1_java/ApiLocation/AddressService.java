@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AddressService {
     private static final String BASE_URL = "https://nominatim.openstreetmap.org/";
-    private NominatimApi api;
+    private final NominatimApi api;
 
     public AddressService(){
         Retrofit retrofit = new Retrofit.Builder()
@@ -30,6 +30,7 @@ public class AddressService {
             addIfNotEmpty(addressParts, address.road);
             addIfNotEmpty(addressParts, address.cityDistrict);
             addIfNotEmpty(addressParts, address.quarter);
+            addIfNotEmpty(addressParts, address.suburb);
             addIfNotEmpty(addressParts, address.city);
 
             return String.join(", ", addressParts);

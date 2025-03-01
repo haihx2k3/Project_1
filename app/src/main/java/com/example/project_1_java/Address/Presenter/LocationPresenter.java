@@ -22,6 +22,7 @@ import com.example.project_1_java.Utils.copyDbHelper;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class LocationPresenter implements LocationContract.Presenter{
@@ -31,13 +32,15 @@ public class LocationPresenter implements LocationContract.Presenter{
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private MyLocationNewOverlay locationOverlay;
     private AddressService service;
+    private ExecutorService executors;
     public LocationPresenter(LocationContract.View view,Context context) {
         this.view = view;
         this.context = context;
         this.db = new copyDbHelper(context);
         this.service = new AddressService();
+        this.executors = Executors.newSingleThreadExecutor();
     }
-
+    //Check Gps permission
     @Override
     public void onLocationClick() {
         if (isGPSEnabled()){
@@ -46,7 +49,7 @@ public class LocationPresenter implements LocationContract.Presenter{
             promptEnableGPS();
         }
     }
-
+    //Insert a new record
     @Override
     public void onAddRecord(String name, String phone, String location, String locationPlus) {
         ContentValues contentValues = new ContentValues();
@@ -61,7 +64,7 @@ public class LocationPresenter implements LocationContract.Presenter{
         }
        database.close();
     }
-
+    //Check empty
     @Override
     public void checkFormValidity(String name, String phone, String location, String locationPlus) {
         boolean allFieldsFilled = !name.isEmpty() && !phone.isEmpty() && !location.isEmpty() && !locationPlus.isEmpty();
@@ -69,7 +72,7 @@ public class LocationPresenter implements LocationContract.Presenter{
         boolean isPhoneNumberValid = sanitizedPhone.matches("^(\\+84|0)[3|5|7|8|9]\\d{8}$");
         view.enableAddButton(allFieldsFilled && isPhoneNumberValid);
     }
-
+    // Check location permission
     @Override
     public void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -79,10 +82,10 @@ public class LocationPresenter implements LocationContract.Presenter{
             view.checkPermission();
         }
     }
-
+    // Fetch address from coordinates using an API service
     @Override
     public void fetchAddress(double latitude, double longitude) {
-        Executors.newSingleThreadExecutor().execute(() -> {
+        executors.execute(() -> {
             try {
                 String address = service.getAddressFromCoordinates(latitude, longitude);
                 mainHandler.post(()->{
@@ -94,10 +97,13 @@ public class LocationPresenter implements LocationContract.Presenter{
                    view.showToast("Failed to fetch address");
                    view.hideLoading();
                });
+            }finally {
+                executors.shutdown();
             }
         });
-    }
 
+    }
+    // Show alert dialog to guide the user to enable location permission
     @Override
     public void onSetting() {
         AlertDialog dialog = new AlertDialog.Builder(context)
@@ -119,11 +125,20 @@ public class LocationPresenter implements LocationContract.Presenter{
     public void onPermissionGranted() {
        onLocationClick();
     }
+    // Stop tracking user's location
+    @Override
+    public void stopLocationUpdates() {
+        if (locationOverlay != null) {
+            locationOverlay.disableMyLocation();
+        }
+    }
 
+    // Check if GPS is enabled on the device
     private boolean isGPSEnabled() {
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
+    // Get user's current location
     private void getLocation() {
         locationOverlay = new MyLocationNewOverlay(new MapView(context));
         locationOverlay.enableMyLocation();
@@ -135,7 +150,7 @@ public class LocationPresenter implements LocationContract.Presenter{
             }
         });
     }
-
+    //Show dia ask user
     private void promptEnableGPS() {
         new AlertDialog.Builder(context)
                 .setMessage("Để trải nghiệm tốt hơn bạn có muốn bật vị trí không")
@@ -143,9 +158,5 @@ public class LocationPresenter implements LocationContract.Presenter{
                 .setNegativeButton("Không", null)
                 .show();
     }
-    public void stopLocationUpdates() {
-        if (locationOverlay != null) {
-            locationOverlay.disableMyLocation();
-        }
-    }
+
 }

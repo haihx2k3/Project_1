@@ -45,11 +45,49 @@
                 android:background="@drawable/imgsearch"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/ln2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/lnControl"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dp"
+            android:padding="5dp"
+            android:visibility="gone">
+            <ImageButton
+                android:id="@+id/imgAscending"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/sortascending"
+                android:scaleType="centerCrop"
+                android:background="@android:color/transparent"
+                app:tint="@color/green"
+                android:layout_marginEnd="5dp"/>
+            <ImageButton
+                android:id="@+id/imgDecreasing"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/sortdecreasing"
+                android:scaleType="centerCrop"
+                android:background="@android:color/transparent"
+                app:tint="@color/green" />
+        </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSearch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/lnControl"
+            android:layout_below="@+id/ln2"
             android:layout_marginStart="10dp"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnEmptyBranch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mua sắm ngay"
+            android:drawableBottom="@drawable/baseline_shopping_cart_24"
+            android:padding="5dp"
+            android:background="@drawable/bk_btnlogin"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
     </RelativeLayout>
 </RelativeLayout>

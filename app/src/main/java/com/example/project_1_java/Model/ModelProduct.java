@@ -10,7 +10,7 @@ public class ModelProduct {
     private String detail;
     private String price;
     private List<String> uriList;
-    private List<ClassifyModel> classify;
+    private List<String> keySearch;
     public ModelProduct(){};
     public ModelProduct(String id, String sellerId, String title, String detail, String price, List<String> uriList, List<ClassifyModel> classify) {
         this.id = id;
@@ -19,7 +19,7 @@ public class ModelProduct {
         this.detail = detail;
         this.price = price;
         this.uriList = uriList;
-        this.classify = classify;
+        this.keySearch = keySearch;
     }
     public String getId() {
         return id;
@@ -67,14 +67,6 @@ public class ModelProduct {
 
     public void setUriList(List<String> uriList) {
         this.uriList = uriList;
-    }
-
-    public List<ClassifyModel> getClassify() {
-        return classify;
-    }
-
-    public void setClassify(List<ClassifyModel> classify) {
-        this.classify = classify;
     }
 
 }

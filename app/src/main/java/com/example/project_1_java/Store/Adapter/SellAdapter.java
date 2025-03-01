@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.project_1_java.Model.ClassifyModel;
 import com.example.project_1_java.R;
 
 import java.util.List;
@@ -51,5 +52,16 @@ public class SellAdapter extends RecyclerView.Adapter<SellAdapter.SellViewHolder
             imageView = itemView.findViewById(R.id.imgSell);
             delete = itemView.findViewById(R.id.btnDelete);
         }
+    }
+    public void updateData(List<Uri> newData) {
+        if (newData != null) {
+            this.imageUris.clear();
+            this.imageUris.addAll(newData);
+            notifyDataSetChanged();
+        }
+    }
+    public void clearData(){
+        this.imageUris.clear();
+        notifyDataSetChanged();
     }
 }

@@ -1,5 +1,7 @@
 package com.example.project_1_java.Utils;
 
+import android.util.Log;
+
 import com.example.project_1_java.Model.AvailableModel;
 import com.example.project_1_java.Model.ClassifyModel;
 import com.example.project_1_java.Model.ImageModel;
@@ -19,6 +21,7 @@ import com.google.firebase.firestore.WriteBatch;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -347,6 +350,32 @@ public class FirebaseUtil {
                 })
                 .addOnFailureListener(e -> onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error occurred"));
     }
+    public void getBranchProduct(String branch,ItemCallback<List<ModelProduct>> onSuccess, FailureCallback onFailure) {
+        if (isLoading) return;
+        isLoading = true;
+        Query query = firestore.collection(branch).limit(10);
+        if (lastData!=null){
+            query = query.startAfter(lastData);
+        }
+        List<ModelProduct> itemList = Collections.synchronizedList(new ArrayList<>());
+        query.get().addOnSuccessListener(result->{
+                    if (result != null && !result.getDocuments().isEmpty()) {
+                        for (DocumentSnapshot document : result.getDocuments()) {
+                            ModelProduct item = document.toObject(ModelProduct.class);
+                            if (item != null) {
+                                itemList.add(item);
+                            }
+                        }
+                        lastData = result.getDocuments().get(result.size() - 1);
+                    }
+                    isLoading = false;
+                    onSuccess.onResult(itemList);
+                })
+                .addOnFailureListener(e -> {
+                    isLoading = false;
+                    onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error get Branch");
+                });
+    }
 
     public void updateOder(String id, int count, Float total) {
         Map<String, Object> updates = Map.of("count" , count, "total", total);
@@ -363,9 +392,35 @@ public class FirebaseUtil {
             firestore.collection("Users").document(user).update(updates).addOnSuccessListener(aVoid -> onSuccess.run());
         }
     }
-
     public void deleteOder (String id) {
         firestore.collection("Card").document(currentUserId()).collection("card").document(id).delete();
+    }
+    public void searchProduct(String searchKeyword,ItemCallback<List<ModelProduct>> onSuccess, FailureCallback onFailure){
+        if (isLoading) return;
+        isLoading = true;
+        Query query = firestore.collection("Product").whereGreaterThanOrEqualTo("title",searchKeyword)
+                .whereLessThanOrEqualTo("title",searchKeyword+"\uf8ff").limit(10);
+        if (lastData!=null){
+            query = query.startAfter(lastData);
+        }
+        List<ModelProduct> itemList = Collections.synchronizedList(new ArrayList<>());
+        query.get().addOnSuccessListener(result->{
+                    if (result != null && !result.getDocuments().isEmpty()) {
+                        for (DocumentSnapshot document : result.getDocuments()) {
+                            ModelProduct item = document.toObject(ModelProduct.class);
+                            if (item != null) {
+                                itemList.add(item);
+                            }
+                        }
+                        lastData = result.getDocuments().get(result.size() - 1);
+                    }
+                    isLoading = false;
+                    onSuccess.onResult(itemList);
+                })
+                .addOnFailureListener(e -> {
+                    isLoading = false;
+                    onFailure.onFailure(e.getMessage() != null ? e.getMessage() : "Error Search");
+                });
     }
 
     // Callback interfaces for handling results

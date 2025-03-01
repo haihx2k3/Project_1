@@ -13,17 +13,22 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ProfilePresenter implements ProfileContract.Presenter {
     private final ProfileContract.View view;
     private final SellViewModel viewModel;
     private FragmentActivity activity;
+    private ExecutorService executor;
+    //Constructor
     public ProfilePresenter(ProfileContract.View view, SellViewModel viewModel,FragmentActivity activity) {
         this.activity = activity;
         this.view = view;
         this.viewModel = viewModel;
+        this.executor = Executors.newSingleThreadExecutor();
     }
-
+    //Get info user
     @Override
     public void loadProfile(String uid) {
         new FirebaseUtil().getProfile((fetch)->{
@@ -33,7 +38,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
             view.setBirthDay(birth);
         });
     }
-
+    //Save data to firebase
     @Override
     public void saveProfile(String name, String gender, String birthDay, Uri img) {
         view.showLoading();
@@ -45,22 +50,22 @@ public class ProfilePresenter implements ProfileContract.Presenter {
             }
         });
     }
-
+    //Open Gallery
     @Override
     public void onOpenImage() {
         view.openImagePicker();
     }
-
+    //Process when access is granted.
     @Override
     public void onPermissionGranted() {
         view.openImagePicker();
     }
-
+    //Process when access is denied
     @Override
     public void onPermissionDenied() {
         view.onSetting();
     }
-
+    //Open dialog date
     @Override
     public void onDatePicker() {
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
@@ -76,7 +81,7 @@ public class ProfilePresenter implements ProfileContract.Presenter {
         });
         datePicker.show(activity.getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
     }
-
+    //Open dialog gender
     @Override
     public void onGender() {
         String[] options = {"Nam", "Nữ"};

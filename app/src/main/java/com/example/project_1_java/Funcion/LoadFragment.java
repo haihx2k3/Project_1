@@ -17,10 +17,4 @@ public class LoadFragment {
         transaction.addToBackStack(null);
         transaction.commit();
     }
-    public void loadFragment(AppCompatActivity activity, int containerId, Fragment fragment,String tag) {
-        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        transaction.replace(containerId, fragment,tag);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
 }

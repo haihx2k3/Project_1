@@ -43,12 +43,13 @@ public class ProfileActivity extends LoadingEffectActivity implements ProfileCon
         presenter = new ProfilePresenter(this,viewModel,this);
         getData();
         setupProfile();
-        setupListener();
+        setupView();
         setupRsLauncher();
         permissionManager = new PermissionManager(this,permissionLauncher,pickImageLauncher);
     }
 
     private void setupRsLauncher() {
+        //Set avatar for UI
         pickImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result->{
             if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                 Uri selectedImageUri = result.getData().getData();
@@ -58,6 +59,7 @@ public class ProfileActivity extends LoadingEffectActivity implements ProfileCon
                 }
             }
         });
+        //Check permission conditions
         permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
             if (isGranted) {
                 presenter.onPermissionGranted();
@@ -67,10 +69,11 @@ public class ProfileActivity extends LoadingEffectActivity implements ProfileCon
         });
     }
 
-    private void setupListener() {
+    private void setupView() {
         binding.edtBirthDay.setOnClickListener(v -> presenter.onDatePicker());
         binding.edtGender.setOnClickListener(v -> presenter.onGender());
         binding.imgBack.setOnClickListener(v -> finish());
+        //Open gallery
         binding.imgProfile.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 requestPermission();
@@ -78,6 +81,7 @@ public class ProfileActivity extends LoadingEffectActivity implements ProfileCon
                 presenter.onOpenImage();
             }
         });
+        //Upload FireBase
         binding.imgCheckEdit.setOnClickListener(v->{
             String name = binding.edtNameEdit.getText().toString().trim();
             String gender = binding.edtGender.getText().toString();
@@ -85,11 +89,12 @@ public class ProfileActivity extends LoadingEffectActivity implements ProfileCon
             presenter.saveProfile(name, gender, birthDay, img);
         });
     }
-
+    //set up UI avatar
     private void setupProfile() {
         Glide.with(this).load(img).placeholder(R.drawable.profile).into(binding.imgProfile);
         presenter.loadProfile(uid);
     }
+    //receive data
     private void getData() {
         userName = getIntent().getStringExtra("name");
         setName(userName);
@@ -139,12 +144,12 @@ public class ProfileActivity extends LoadingEffectActivity implements ProfileCon
     public void openImagePicker() {
         permissionManager.openImagePicker();
     }
-
+    //Require user to grant permission a second time
     @Override
     public void onSetting() {
         permissionManager.showPermissionRationaleDialog();
     }
-
+    //Require user to grant permission a first time
     @Override
     public void requestPermission() {
         permissionManager.requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE);

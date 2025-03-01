@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.project_1_java.Branch.BranchActivity;
 import com.example.project_1_java.Card.CardActivity;
 import com.example.project_1_java.Chat.ResentChatActivity;
 import com.example.project_1_java.Header.Adapter.BranchHeaderAdapter;
@@ -83,6 +83,7 @@ public class HomeFragment extends Fragment implements HomeContract.View {
     private void setupListener() {
         binding.btnCard.setOnClickListener(v->presenter.onCardClicked());
         binding.btnChat.setOnClickListener(v->presenter.onChatClicked());
+        binding.imgSearch.setOnClickListener(v->presenter.onSearchButtonClicked());
 
     }
 
@@ -116,7 +117,6 @@ public class HomeFragment extends Fragment implements HomeContract.View {
                 }
             }));
         }
-        binding.imgSearch.setOnClickListener(v->Log.d("products",products.toString()));
     }
 
     @Override
@@ -142,7 +142,9 @@ public class HomeFragment extends Fragment implements HomeContract.View {
             binding.rvBranch.setAdapter(new BranchHeaderAdapter(branch, new OnClick() {
                 @Override
                 public void onClick(int pos) {
-                    Toast.makeText(getContext(), branch.get(pos).getTitle(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getContext(), BranchActivity.class);
+                    intent.putExtra("branch",branch.get(pos).getTitle());
+                    startActivity(intent);
                 }
             }));
         }

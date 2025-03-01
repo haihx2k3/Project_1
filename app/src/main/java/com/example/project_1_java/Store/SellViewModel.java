@@ -16,7 +16,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -28,23 +27,19 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import kotlinx.coroutines.Dispatchers;
-import kotlinx.coroutines.GlobalScope;
-
 public class SellViewModel extends ViewModel {
     private DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
     private StorageReference strRef = FirebaseStorage.getInstance().getReference("Images");
     private MutableLiveData<Boolean> _dataSaved = new MutableLiveData<>();
-
     public LiveData<Boolean> getDataSaved() {
         return _dataSaved;
     }
-
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    //Upload product to Firebase
     public void saveDataSell(String title,String detail, String price, List<Uri> listUri, List<ClassifyModel> classify,String branch) {
-        String id = dbRef.push().getKey();
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> {
             try {
+                String id = dbRef.push().getKey();
                 List<byte[]> compressedImages = fetchAndCompressImages(listUri);
                 List<String> productImage = uploadImagesToFirebase(compressedImages, id);
                 FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -56,11 +51,13 @@ public class SellViewModel extends ViewModel {
                         @Override
                         public void run() {
                             _dataSaved.postValue(true);
+                            executorService.shutdown();
                         }
                     }, new FirebaseUtil.FailureCallback() {
                         @Override
                         public void onFailure(String errorMessage) {
                             _dataSaved.postValue(false);
+                            executorService.shutdown();
                         }
                     });
                 }
@@ -70,7 +67,7 @@ public class SellViewModel extends ViewModel {
             }
         });
     }
-
+    //Save info user to Firebase
     public void updateUser(String name, String gender, String birthDay, Uri avatar) {
         String id = dbRef.push().getKey();
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -89,7 +86,7 @@ public class SellViewModel extends ViewModel {
             }
         });
     }
-
+    //User avatar processing
     private byte[] fetchAndCompressUser(Uri uri) throws Exception {
         return Executors.newSingleThreadExecutor().submit(() -> {
             Bitmap bitmap = Picasso.get().load(uri).get();
@@ -98,7 +95,7 @@ public class SellViewModel extends ViewModel {
             return baos.toByteArray();
         }).get();
     }
-
+    //Upload avatar to Firebase
     private String uploadImageUser(byte[] imageData, String id) throws Exception {
         return Executors.newSingleThreadExecutor().submit(() -> {
             StorageReference imageRef = strRef.child(id + ".jpg");
@@ -106,6 +103,7 @@ public class SellViewModel extends ViewModel {
             return Tasks.await(imageRef.getDownloadUrl()).toString();
         }).get();
     }
+    //Product image processing
     private List<byte[]> fetchAndCompressImages(List<Uri> uris) throws Exception {
         return Executors.newSingleThreadExecutor().submit(() -> {
             List<byte[]> compressedImages = new ArrayList<>();
@@ -118,7 +116,7 @@ public class SellViewModel extends ViewModel {
             return compressedImages;
         }).get();
     }
-
+    //Upload product image to Firebase
     private List<String> uploadImagesToFirebase(List<byte[]> images, String id) throws Exception {
         return Executors.newSingleThreadExecutor().submit(() -> {
             List<String> imageUrls = new ArrayList<>();
@@ -132,7 +130,7 @@ public class SellViewModel extends ViewModel {
             return imageUrls;
         }).get();
     }
-
+    //Upload data array category
     private List<ClassifyModel> uploadVariantImages(List<ClassifyModel> variants, String id) throws Exception {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         try {
@@ -148,7 +146,7 @@ public class SellViewModel extends ViewModel {
                 return updatedVariants;
             }).get();
         } catch (Exception e) {
-            Log.e("TAG", "Error uploading variant images: " + e.getMessage(), e);
+            Log.e("SellViewModel", "Error uploading variant images: " + e.getMessage(), e);
             throw e;
         } finally {
             executor.shutdown();

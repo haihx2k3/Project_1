@@ -59,7 +59,7 @@ public class Location extends Fragment implements LocationContract.View {
         TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
+            //check empty view
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 checkFormValidity();
@@ -89,6 +89,7 @@ public class Location extends Fragment implements LocationContract.View {
                 binding.edtHouseNumber.getText().toString()
         );
     }
+    //processing permission
     private void onPermission() {
         permissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
             if (isGranted) {
@@ -98,6 +99,7 @@ public class Location extends Fragment implements LocationContract.View {
             }
         });
     }
+    // Check if the parent fragment implements OnClickLocation interface
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -121,7 +123,7 @@ public class Location extends Fragment implements LocationContract.View {
             dialog.dismiss();
         }
     }
-
+    //show location
     @Override
     public void displayLocation(String address) {
         binding.edtLocation.setText(address);
@@ -136,7 +138,7 @@ public class Location extends Fragment implements LocationContract.View {
     public void showToast(String message) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
-
+    //set color button
     @Override
     public void enableAddButton(boolean enabled) {
         binding.btnAdd.setEnabled(enabled);

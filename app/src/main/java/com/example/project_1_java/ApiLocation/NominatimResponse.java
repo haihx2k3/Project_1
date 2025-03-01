@@ -13,7 +13,8 @@ public class NominatimResponse {
 
         @SerializedName("quarter")
         public String quarter;
-
+        @SerializedName("suburb")
+        public String suburb;
         @SerializedName("city")
         public String city;
     }

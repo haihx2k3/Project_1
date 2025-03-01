@@ -19,6 +19,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.project_1_java.InterFace.OnClick;
+import com.example.project_1_java.Model.ClassifyModel;
 import com.example.project_1_java.Model.ModelProduct;
 import com.example.project_1_java.R;
 
@@ -80,6 +81,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         ImageView imageView;
         TextView title, price;
         View loading;
+
         public ProductHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.image_propose);
@@ -88,9 +90,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             loading = itemView.findViewById(R.id.incLoading);
         }
     }
-    public void addItems(List<ModelProduct> newItems) {
-        int previousSize = product.size();
-        product.addAll(newItems);
-        notifyItemRangeInserted(previousSize, newItems.size());
+    public void updateData(List<ModelProduct> newData) {
+        if (newData != null) {
+            this.product.clear();
+            this.product.addAll(newData);
+            notifyDataSetChanged();
+        }
     }
 }
