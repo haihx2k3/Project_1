@@ -1,5 +1,6 @@
 package com.example.project_1_java.Branch;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -11,6 +12,7 @@ import com.example.project_1_java.Branch.Presenter.BranchPresenter;
 import com.example.project_1_java.InterFace.OnClick;
 import com.example.project_1_java.Model.ModelProduct;
 import com.example.project_1_java.Product.ProductAdapter;
+import com.example.project_1_java.Product.ProductInfoActivity;
 import com.example.project_1_java.databinding.ActivityBranchBinding;
 
 import java.util.List;
@@ -48,10 +50,21 @@ public class BranchActivity extends AppCompatActivity implements BranchContract.
                 binding.rvBranch.setAdapter(new ProductAdapter(model, new OnClick() {
                     @Override
                     public void onClick(int pos) {
-
+                        presenter.onProductClicked(pos, model.get(pos));
                     }
                 }));
             }
         }
+    }
+
+    @Override
+    public void showProductActivity(String sellerId, String id, String title, String price, String details) {
+        Intent intent = new Intent(this, ProductInfoActivity.class);
+        intent.putExtra("sellerId", sellerId);
+        intent.putExtra("id", id);
+        intent.putExtra("title", title);
+        intent.putExtra("price", price);
+        intent.putExtra("details", details);
+        startActivity(intent);
     }
 }

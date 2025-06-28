@@ -10,7 +10,7 @@ import com.example.project_1_java.Login.LoginActivity;
 import com.example.project_1_java.Store.ShopActivity;
 import com.example.project_1_java.Utils.FirebaseUtil;
 
-public class SecondPresenter implements SecondContract.Presenter {
+public class  SecondPresenter implements SecondContract.Presenter {
     private final SecondContract.View view;
     private final FirebaseUtil firebaseUtil;
     private String userName;
@@ -87,6 +87,22 @@ public class SecondPresenter implements SecondContract.Presenter {
                 .apply();
         view.displayUserInfo(userName,avatarProfile);
     }
+
+    @Override
+    public void onChatClicked() {
+        if (view != null) {
+            view.showChatActivity();
+        }
+    }
+
+    @Override
+    public void onCardClicked() {
+        boolean loginSuccess = context.getSharedPreferences("saveLogin", Context.MODE_PRIVATE).getBoolean("hide", false);
+        if (view != null) {
+            view.showCardActivity(loginSuccess);
+        }
+    }
+
     private void navigateToActivity(Class<?> targetActivity) {
         Intent intent = new Intent(context, targetActivity);
         intent.putExtra("name", userName);

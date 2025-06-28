@@ -5,6 +5,8 @@ public interface SecondContract {
         void showLoggedInState();
         void showLoggedOutState();
         void displayUserInfo(String userName, String avatarProfile);
+        void showChatActivity();
+        void showCardActivity(boolean checkLogin);
     }
 
     interface Presenter {
@@ -15,5 +17,7 @@ public interface SecondContract {
         void onSettingsClicked();
         void onSellProductClicked();
         void clearTemporaryData();
+        void onChatClicked();
+        void onCardClicked();
     }
 }

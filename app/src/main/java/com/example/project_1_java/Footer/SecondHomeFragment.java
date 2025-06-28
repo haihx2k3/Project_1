@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.example.project_1_java.Card.CardActivity;
+import com.example.project_1_java.Chat.ResentChatActivity;
 import com.example.project_1_java.Footer.InterFace.SecondContract;
 import com.example.project_1_java.Footer.Presenter.SecondPresenter;
 import com.example.project_1_java.InterFace.OnLogIn;
@@ -49,6 +51,9 @@ public class SecondHomeFragment extends Fragment implements SecondContract.View 
         binding.btnSetting.setOnClickListener(v -> launcher.launch(new Intent(getContext(), EditActivity.class)));
         binding.btnSellPr.setOnClickListener(v -> presenter.onSellProductClicked());
         binding.btnHistory.setOnClickListener(v -> binding.txtId.setVisibility(View.VISIBLE));
+        binding.btnChat.setOnClickListener(v -> presenter.onChatClicked());
+        binding.btnCard.setOnClickListener(v -> presenter.onCardClicked());
+
     }
 
     @Override
@@ -76,6 +81,22 @@ public class SecondHomeFragment extends Fragment implements SecondContract.View 
             binding.txtId.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    @Override
+    public void showChatActivity() {
+        startActivity(new Intent(requireContext(), ResentChatActivity.class));
+    }
+
+    @Override
+    public void showCardActivity(boolean checkLogin) {
+        Intent intent;
+        if (checkLogin) {
+            intent = new Intent(getContext(), CardActivity.class);
+        } else {
+            intent = new Intent(getContext(), LoginActivity.class);
+        }
+        startActivity(intent);
     }
 
     @Override

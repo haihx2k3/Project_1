@@ -75,9 +75,12 @@ public class SellPresenter implements SellContract.Presenter{
     //Processing image
     @Override
     public void handleImagePicked(List<Uri> uriList) {
-        if (uriList!=null&&!uriList.isEmpty()){
-            imageUris = uriList;
-            view.showImages(uriList);
+        if (uriList != null && !uriList.isEmpty()) {
+            if (imageUris == null) {
+                imageUris = new ArrayList<>();
+            }
+            imageUris.addAll(uriList);
+            view.showImages(imageUris);
         }
     }
     //Open fragment with data

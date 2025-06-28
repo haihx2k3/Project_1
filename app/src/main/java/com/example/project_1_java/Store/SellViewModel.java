@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.project_1_java.Model.ClassifyModel;
+import com.example.project_1_java.Model.ImageModel;
 import com.example.project_1_java.Model.ModelProduct;
 import com.example.project_1_java.Utils.FirebaseUtil;
 import com.google.android.gms.tasks.Tasks;
@@ -86,6 +87,27 @@ public class SellViewModel extends ViewModel {
             }
         });
     }
+    // Trong SellViewModel.java
+//    public void addAds(List<Uri> listUri) {
+//        executorService.execute(() -> {
+//            try {
+//                String id = dbRef.push().getKey(); // Tạo ID duy nhất cho quảng cáo
+//                List<byte[]> compressedImages = fetchAndCompressImages(listUri); // Nén hình ảnh
+//                List<String> imageUrls = uploadImagesToFirebase(compressedImages, id); // Tải hình lên Firebase Storage
+//                ImageModel imageModel = new ImageModel(id, imageUrls); // Tạo đối tượng ImageModel
+//                new FirebaseUtil().addAds(id, imageModel, () -> {
+//                    _dataSaved.postValue(true); // Cập nhật LiveData khi thành công
+//                    executorService.shutdown();
+//                }, errorMessage -> {
+//                    _dataSaved.postValue(false); // Cập nhật LiveData khi thất bại
+//                    executorService.shutdown();
+//                });
+//            } catch (Exception e) {
+//                _dataSaved.postValue(false);
+//                e.printStackTrace();
+//            }
+//        });
+//    }
     //User avatar processing
     private byte[] fetchAndCompressUser(Uri uri) throws Exception {
         return Executors.newSingleThreadExecutor().submit(() -> {

@@ -52,4 +52,11 @@ public class BranchPresenter implements BranchContract.Presenter {
             ((Activity) view).runOnUiThread(() -> view.showBranch(mList));
         });
     }
+
+    @Override
+    public void onProductClicked(int pos, ModelProduct product) {
+        if (view != null) {
+            view.showProductActivity(product.getSellerId(), product.getId(), product.getTitle(), product.getPrice(), product.getDetail());
+        }
+    }
 }

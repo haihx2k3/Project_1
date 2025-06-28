@@ -57,7 +57,4 @@ public class PermissionManager {
         intent.setType("image/*");
         imagePickerLauncher.launch(intent);
     }
-
-
-
 }
